@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>Jon Barron</title>
+    <title>Dingxi(Kristen) Zhang</title>
 
     <meta name="author" content="Jon Barron">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +20,7 @@
             <tr style="padding:0px">
               <td style="padding:2.5%;width:63%;vertical-align:middle">
                 <p class="name" style="text-align: center;">
-                  Jon Barron
+                  Dingxi Zhang
                 </p>
                 <p>Hi!! I'm Dingxi(Kristen) Zhang, a senior student at University of Chinese Academy of Sciences majoring Computer Science. My research focus on computer vision, computer graphics and human computer interaction.
                   I'm fortunate to be working with <a href="http://geometrylearning.com/lin/">Prof. Lin Gao</a>, <a href="https://people.ucas.edu.cn/~sgshan?language=en">Prof. Shiguang Shan</a> and <a href="https://lynnho.github.io/">Prof. Zhenliang He</a>.
@@ -29,12 +29,12 @@
                 <p>I'm applying to Ph.D. programs in Computer Vision and Computer Graphics this cycle!</p>
                 <p style="text-align:center">
                   <a href="mailto:zhangdingxi20a@mails.ucas.ac.cn">Email</a> &nbsp;/&nbsp;
-                  <a href="data/JonBarron-CV.pdf">CV</a> &nbsp;/&nbsp;
+                  <a href="data/Dingxi Zhang_CV.pdf">CV</a> &nbsp;/&nbsp;
                   <a href="https://github.com/Kristen-Z/">Github</a>
                 </p>
               </td>
               <td style="padding:2.5%;width:40%;max-width:40%">
-                <a href="images/JonBarron.jpg"><img style="width:100%;max-width:100%;object-fit: cover; border-radius: 50%;" alt="profile photo" src="images/JonBarron_circle.jpg" class="hoverZoomLink"></a>
+                <a href="images/zdx.jpg"><img style="width:100%;max-width:100%;object-fit: cover; border-radius: 50%;" alt="profile photo" src="images/zdx_crop.jpg" class="hoverZoomLink"></a>
               </td>
             </tr>
           </tbody></table>
@@ -43,41 +43,96 @@
               <td style="padding:20px;width:100%;vertical-align:middle">
                 <h2>Research</h2>
                 <p>
-                  I'm interested in computer vision, machine learning, optimization, and image processing. Most of my research is about inferring the physical world (shape, motion, color, light, etc) from images. Representative papers are <span class="highlight">highlighted</span>.
+                  I'm interested in 3D vision, machine learning, optimization, and image processing. Most of my research is about inferring the physical world (shape, motion, color, light, etc) from images. Representative papers are <span class="highlight">highlighted</span>.
                 </p>
               </td>
             </tr>
           </tbody></table>
-          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+
+        <tr onmouseout="strokenerf_stop()" onmouseover="strokenerf_start()">
+    		  <td style="padding:20px;width:25%;vertical-align:middle">
+    		    <div class="one">
+    		      <div class="two" id='strokenerf_image'>
+    			<img src='images/strokenerf.jpg' width="160"></div>
+    		      <img src='images/strokenerf.jpg' width="160">
+    		    </div>
+    		    <script type="text/javascript">
+    		      function strokenerf_start() {
+    			document.getElementById('strokenerf_image').style.opacity = "1";
+    		      }
+    	  
+    		      function strokenerf_stop() {
+    			document.getElementById('strokenerf_image').style.opacity = "0";
+    		      }
+    		      localsdf_stop()
+    		    </script>
+    		  </td>
+    		  <td style="padding:20px;width:75%;vertical-align:middle; text-align:center;">
+    		    <a href="https://kristen-z.github.io/">
+    		      <span class="papertitle">Towards Efficient 3D Local Conditioning </span>
+    		    </a>
+              <br>
+          Xiaojuan Li,
+          <strong>Dingxi Zhang</strong>,
+          <a href="http://people.geometrylearning.com/csy/">Shu-Yu Chen</a>,
+          Feng-Lin Liu
+          <br>
+          <em>arXiv</em>, 2023
+          <br>
+          <a href="http://www.geometrylearning.com/StrokeFaceNeRF/paper.pdf">paper</a>
+          <p></p>
+          <p>
+            A novel stroke-based method for editing facial NeRF appearance.         
+          </p>
+        </td>
+      </tr>
+          
+          
+          <tr onmouseout="localsdf_stop()" onmouseover="localsdf_start()">
+    		  <td style="padding:20px;width:25%;vertical-align:middle">
+    		    <div class="one">
+    		      <div class="two" id='localsdf_image'>
+    			<img src='images/localsdf.jpg' width="160"></div>
+    		      <img src='images/localsdf.jpg' width="160">
+    		    </div>
+    		    <script type="text/javascript">
+    		      function localsdf_start() {
+    			document.getElementById('localsdf_image').style.opacity = "1";
+    		      }
+    	  
+    		      function localsdf_stop() {
+    			document.getElementById('localsdf_image').style.opacity = "0";
+    		      }
+    		      localsdf_stop()
+    		    </script>
+    		  </td>
+    		  <td style="padding:20px;width:75%;vertical-align:middle; text-align:center;">
+    		    <a href="https://kristen-z.github.io/">
+    		      <span class="papertitle">Towards Efficient 3D Local Conditioning </span>
+    		    </a>
+              <br>
+          <strong>Dingxi Zhang</strong>,
+          <a href="https://lukoianov.com/">Artem Lukoianov</a>
+          <br>
+          <em>SIGGRAPH Asia</em>, 2023
+          <br>
+          <a href="https://dl.acm.org/doi/pdf/10.1145/3610542.3626151">paper</a>
+          /
+          <a href="https://github.com/Kristen-Z/LocalSDF/">code</a>
+          <p></p>
+          <p>
+         Using an weight-encoded Neural Network to approximate a grid of latent codes, while sharing the decoder across the entire category to achieve better reconstruction quality while using less memory per sample to store single geometry.
+          </p>
+        </td>
+      </tr>
 
 
-
-    <tr onmouseout="smerf_stop()" onmouseover="smerf_start()">
-      <td style="padding:20px;width:25%;vertical-align:middle">
-        <div class="one">
-          <div class="two" id='smerf_image'><video  width=100% muted autoplay loop>
-          <source src="images/smerf.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-          </video></div>
-          <img src='images/smerf.jpg' width=100%>
-        </div>
-        <script type="text/javascript">
-          function smerf_start() {
-            document.getElementById('smerf_image').style.opacity = "1";
-          }
-
-          function smerf_stop() {
-            document.getElementById('smerf_image').style.opacity = "0";
-          }
-          smerf_stop()
-        </script>
-      </td>
           <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
             <tr>
               <td style="padding:0px">
                 <br>
                 <p style="text-align:right;font-size:small;">
-                  Feel free to steal this website's <a href="https://github.com/jonbarron/jonbarron_website">source code</a>. <strong>Do not</strong> scrape the HTML from this page itself, as it includes analytics tags that you do not want on your own website &mdash; use the github code instead. Also, consider using <a href="https://leonidk.com/">Leonid Keselman</a>'s <a href="https://github.com/leonidk/new_website">Jekyll fork</a> of this page.
+                  Design and source code from <a href="https://github.com/jonbarron/jonbarron_website">Jon Barron's website</a>.
                 </p>
               </td>
             </tr>
