@@ -66,6 +66,49 @@
               </tbody></table>
 
             <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+
+              <tr onmouseout="giga_stop()"
+                  onmouseover="giga_start()">
+                  <td style="padding:20px;width:25%;vertical-align:middle">
+                    <div class="one">
+                      <div class="two" id='giga_image'>
+                        <img src='images/giga.jpg' width="160"></div>
+                      <img src='images/giga.jpg' width="160">
+                    </div>
+                    <script type="text/javascript">
+                      function giga_start() {
+                        document.getElementById('giga_image').style.opacity = "1";
+                      }
+                
+                      function giga_stop() {
+                        document.getElementById('giga_image').style.opacity = "0";
+                      }
+                      giga_stop()
+                    </script>
+                  </td>
+                  <td style="padding:20px;width:75%;vertical-align:top;">
+                    <a href="https://kristen-z.github.io/">
+                      <span class="papertitle">GigaHands: A Massive Annotated Dataset of Bimanual Hand Activities</span>
+                    </a>
+                    <br>
+                    <a href="https://freddierao.github.io/">Rao Fu*</a>,
+                    <strong>Dingxi Zhang*</strong>,
+                    <a href="https://www.alex-jiang.com/about/">Alex Jiang</a>,
+                    <a href="https://wanjia-fu.com/">Wanjia Fu</a>,
+                    <a href="https://austin-funk.github.io/">Austin Funk</a>
+                    <a href="https://dritchie.github.io/">Daniel Ritchie</a>,
+                    <a href="https://cs.brown.edu/people/ssrinath/">Srinath Sridhar</a>
+                    <br>
+                    <em>arXiv</em>, 2024
+                    <br>
+                    <a href="https://arxiv.org/abs/2412.04244">paper</a> / <a href="https://ivl.cs.brown.edu/research/gigahands.html">project</a>
+                    <p></p>
+                    <p>
+                      A massive annotated dataset capturing 34 hours of bimanual hand activities, totaling 14k motion clips derived from 183 million frames paired with 84k text annotations. 
+                    </p>
+                  </td>
+                </tr>
+
               <tr onmouseout="loat_stop()"
                   onmouseover="loat_start()">
                   <td style="padding:20px;width:25%;vertical-align:middle">
