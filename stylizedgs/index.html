@@ -166,14 +166,6 @@
         <h2 class="title is-3">Video</h2>
         <div class="publication-video">
 
-          <!-- <iframe src="https://www.youtube.com/watch?v=at_42ekU0I0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
-          <!-- <iframe width="400" height="300" src="https://www.youtube.com/embed/xxxxxxxx" 
-          title="YouTube video player" frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-          </iframe> -->
-
           <iframe src="https://drive.google.com/file/d/1PuDanf0JnpyCRtiurPIESG80pU_nEBIj/preview" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen></iframe>
@@ -226,7 +218,48 @@ Extensive experiments across various xxx demonstrate the effectiveness and effic
   </div>
 </section>
 
+<section class="hero is-light is-small">
+    <div class="hero-body" style="background-color: white;">
+    <div class="container is-max-desktop">
+      
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <h3 class="title is-4">Feed-forward Scenes</h3>
+        </div>
+    </div>
 
+      <div class="container is-max-desktop">
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="https://kristen-z.github.io/stylizedgs/videos/flower_14.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="https://kristen-z.github.io/stylizedgs/videos/trex_2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="https://kristen-z.github.io/stylizedgs/videos/horns_123.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="https://kristen-z.github.io/stylizedgs/videos/leaves_22.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="https://kristen-z.github.io/stylizedgs/videos/orchids_7.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <!-- <h2 class="subtitle has-text-centered">Our results on forward-facing captures</h2> -->
+    </div>
+  </section>
 
 <section class="hero is-light is-small">
   <div class="hero-body" style="background-color: white;">
@@ -364,14 +397,11 @@ Extensive experiments across various xxx demonstrate the effectiveness and effic
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{zhang2024stylizedgscontrollablestylization3d,
-      title={StylizedGS: Controllable Stylization for 3D Gaussian Splatting}, 
-      author={Dingxi Zhang and Yu-Jie Yuan and Zhuoxun Chen and Fang-Lue Zhang and Zhenliang He and Shiguang Shan and Lin Gao},
-      year={2024},
-      eprint={2404.05220},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2404.05220}, 
+    <pre><code>@@article{zhang2024stylizedgs,
+  title={Stylizedgs: Controllable stylization for 3d gaussian splatting},
+  author={Zhang, Dingxi and Yuan, Yu-Jie and Chen, Zhuoxun and Zhang, Fang-Lue and He, Zhenliang and Shan, Shiguang and Gao, Lin},
+  journal={arXiv preprint arXiv:2404.05220},
+  year={2024}
 }</code></pre>
   </div>
 </section>
