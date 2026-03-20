@@ -79,6 +79,48 @@
             style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
             <tbody>
 
+              <tr onmouseout="megaflow_stop()" onmouseover="megaflow_start()">
+                <td style="padding:20px;width:25%;vertical-align:middle">
+                  <div class="one">
+                    <div class="two" id='megaflow_image'>
+                      <img src='projects/megaflow/static/images/teaser.jpg' width="160">
+                    </div>
+                    <img src='projects/megaflow/static/images/teaser.jpg' width="160">
+                  </div>
+                  <script type="text/javascript">
+                    function megaflow_start() {
+                      document.getElementById('megaflow_image').style.opacity = "1";
+                    }
+
+                    function megaflow_stop() {
+                      document.getElementById('megaflow_image').style.opacity = "0";
+                    }
+                    megaflow_stop()
+                  </script>
+                </td>
+                <td style="padding:20px;width:75%;vertical-align:top;">
+                  <a href="https://kristen-z.github.io/projects/megaflow/">
+                    <span class="papertitle">MegaFlow: Zero-Shot Large Displacement Optical Flow</span>
+                  </a>
+                  <br>
+                  <strong>Dingxi Zhang</strong>,
+                  <a href="https://fangjinhuawang.github.io/">Fangjinhua Wang</a>,
+                  <a href="https://people.inf.ethz.ch/marc.pollefeys/">Marc Pollefeys</a>,
+                  <a href="https://haofeixu.github.io/">Haofei Xu</a>
+                  <br>
+                  <em>arXiv preprint</em>, 2026
+                  <br>
+                  <a href="https://kristen-z.github.io/projects/megaflow/static/images/MegaFlow.pdf">paper</a> / <a
+                    href="https://kristen-z.github.io/projects/megaflow/">project</a> / <a
+                    href="https://github.com/Kristen-Z/MegaFlow">code</a>
+                  <p></p>
+                  <p>
+                    A simple yet powerful framework for optical flow and point tracking that significantly improves
+                    large displacements estimation and zero-shot generalization.
+                  </p>
+                </td>
+              </tr>
+
               <tr onmouseout="stylizedgs_stop()" onmouseover="stylizedgs_start()">
                 <td style="padding:20px;width:25%;vertical-align:middle">
                   <div class="one">
