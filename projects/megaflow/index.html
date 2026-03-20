@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="MegaFlow: Zero-Shot Large Displacement Optical Flow">
+  <meta name="keywords" content="MegaFlow, Optical Flow, Point Tracking, Zero-Shot, DINO">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MegaFlow: Zero-Shot Large Displacement Optical Flow</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- Bulma and External CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.0/dist/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    /* Custom Styling for Academic Beauty */
+    body {
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .publication-title {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .publication-authors {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .publication-links {
+      margin-top: 1.5rem;
+    }
+
+    .link-block a {
+      margin: 0 0.25rem;
+      border-radius: 20px;
+    }
+
+    .hero.teaser {
+      margin-bottom: 2rem;
+    }
+
+    .hero.teaser img {
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
+    }
+
+    .results-carousel {
+      margin-bottom: 2rem;
+    }
+
+    .results-carousel .item video {
+      border-radius: 8px;
+    }
+
+    .author-block {
+      display: inline-block;
+      margin-right: 1rem;
+    }
+
+    .footer {
+      background-color: #f5f5f5;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      /* 16:9 */
+      height: 0;
+      overflow: hidden;
+      max-width: 100%;
+      background: #000;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .video-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <!-- JS Dependencies -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.0/dist/js/bulma-slider.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Initialize Carousels
+      var carouselOptions = {
+        slidesToScroll: 1,
+        slidesToShow: 1,
+        loop: true,
+        infinite: true,
+        autoplay: false,
+        autoplaySpeed: 3000,
+        pagination: true,
+      };
+
+      bulmaCarousel.attach('#flow-carousel', carouselOptions);
+      bulmaCarousel.attach('#track-carousel', carouselOptions);
+    });
+  </script>
+</head>
+
+<body>
+
+  <section class="hero is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+
+            <h1 class="title is-1 publication-title">MegaFlow: Zero-Shot Large Displacement Optical Flow</h1>
+
+            <!-- Authors -->
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://kristen-z.github.io/">Dingxi Zhang</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://fangjinhuawang.github.io/">Fangjinhua Wang</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://people.inf.ethz.ch/marc.pollefeys/">Marc Pollefeys</a><sup>1,2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://haofeixu.github.io/">Haofei Xu</a><sup>1</sup>
+              </span>
+            </div>
+
+            <!-- Affiliations -->
+            <div class="is-size-6 publication-authors">
+              <span class="author-block"><sup>1</sup>ETH Zurich</span>&nbsp;&nbsp;&nbsp;
+              <span class="author-block"><sup>2</sup>Microsoft</span>
+            </div>
+
+            <!-- Links Placeholder for User -->
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link -->
+                <span class="link-block">
+                  <a href="https://kristen-z.github.io/projects/megaflow/static/images/MegaFlow.pdf"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- Code Link -->
+                <span class="link-block">
+                  <a href="https://github.com/Kristen-Z/MegaFlow"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop mt-5">
+      <div class="hero-body">
+        <img src="static/images/teaser.jpg" alt="MegaFlow Teaser">
+        <h2 class="subtitle has-text-justified mt-3">
+          MegaFlow excels at large displacement optical flow and point tracking.
+          (a) On the Sintel (Final) benchmark, MegaFlow consistently achieves the lowest End-Point Error (EPE),
+          with its advantage widening significantly on large displacements.
+          (b) MegaFlow also demonstrates superior zero-shot point tracking results on TAP-Vid.
+          (c) Visuals and inset error maps further illustrate our state-of-the-art results.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Overview Video -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Overview Video</h2>
+          <div class="video-container shadow">
+            <!-- Main Overview Video -->
+            <video controls autoplay muted loop playsinline>
+              <source src="videos/megaflow_video.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract & Pipeline -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Pipeline Overview</h2>
+          <img src="static/images/pipelinev1.jpg" alt="MegaFlow Pipeline" class="mt-4 mb-4"
+            style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <div class="content has-text-justified">
+            <p>
+              Given an input sequence, a frozen DINO and a trainable CNN extract dense patch tokens and local structural
+              features.
+              Alternating frame and global attention, followed by feature fusion, process these tokens into a globally
+              consistent representation.
+              Pair-wise global matching then computes initial flows. Finally, a recurrent module iteratively refines the
+              initial flows using
+              spatial convolutions and temporal attention for sub-pixel accuracy. Crucially, our design seamlessly
+              processes variable-length
+              inputs and extend to point tracking without architectural modifications.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Optical Flow Results -->
+  <section class="hero is-light is-small pt-5 pb-5">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered mb-5">
+          <div class="column">
+            <h2 class="title is-3">Optical Flow Results</h2>
+          </div>
+        </div>
+        <!-- Flow Carousel -->
+        <div id="flow-carousel" class="carousel results-carousel">
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/flow_res/car_race.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/flow_res/mtb-race.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/flow_res/sintel_market1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/flow_res/sintel_temple.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/flow_res/skate-boy_flow.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/flow_res/spring_0029_left.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/flow_res/spring_0031.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tracking Results -->
+  <section class="hero is-small pt-5 pb-5">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered mb-5">
+          <div class="column">
+            <h2 class="title is-3">Point Tracking Results</h2>
+          </div>
+        </div>
+        <!-- Track Carousel -->
+        <div id="track-carousel" class="carousel results-carousel">
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/track_res/longboard.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/track_res/video_0028.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/track_res/parachute_traj.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/track_res/surf_track.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item px-2">
+            <video autoplay controls muted loop playsinline height="100%" style="border-radius: 10px;">
+              <source src="videos/track_res/swan_traj.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <p class="has-text-centered is-size-7 mt-4" style="color: #666;">
+          <em>* Displaying 1/16 points. Note: As a zero-shot tracking application of our flow model, point visibility is
+            not explicitly predicted, resulting in tracking through occlusions.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BibTeX Section -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <!-- BibTeX Placeholder to be updated by user -->
+      <pre><code>@inproceedings{zhang2026megaflow,
+  title     = {MegaFlow: Zero-Shot Large Displacement Optical Flow},
+  author    = {Zhang, Dingxi and Wang, Fangjinhua and Pollefeys, Marc and Xu, Haofei},
+  booktitle = {arXiv preprint arXiv:},
+  year      = {2026}
+}</code></pre>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>
+          This website is constructed utilizing <a href="https://bulma.io/">Bulma</a> and inspired by the <a
+            href="https://nerfies.github.io/">Nerfies</a> project page template.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
