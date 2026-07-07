@@ -27,10 +27,14 @@
                   <p class="name" style="text-align: center;">
                     Dingxi Zhang
                   </p>
-                  <p>Hi!! I'm Dingxi Zhang (张丁夕), a Master's student in Computer Science at ETH Zurich.
-                    My research focuses on 3D vision, computer graphics, and generative models.
-                    Currently, I am working on research projects in <a href="https://cvg.ethz.ch/">Computer Vision and
-                      Geometry Group</a> led by <a href="https://people.inf.ethz.ch/pomarc/">Prof. Marc Pollefeys</a>.
+                  <p>Hi!! I'm Dingxi Zhang (张丁夕), an incoming <a href="https://learning-systems.org/">CLS</a> PhD student jointly advised by
+                    <a href="https://people.inf.ethz.ch/pomarc/">Prof. Marc Pollefeys</a> (ETH Zurich,
+                    <a href="https://cvg.ethz.ch/">CVG</a>) and
+                    <a href="https://www.mpi-inf.mpg.de/departments/computer-vision-and-machine-learning/people/bernt-schiele">Prof.
+                      Bernt Schiele</a> (<a href="https://www.mpi-inf.mpg.de/home">Max Planck Institute for Informatics</a>). 
+                    
+                    
+                      I obtained my Master's in Computer Science at ETH Zurich, supported by <a href="https://ethz.ch/students/en/studies/financial/scholarships/excellencescholarship.html">ESOP scholarship</a>.
                     Previously, I completed my undergraduate studies at the University of Chinese Academy of Sciences,
                     where I worked with <a href="http://geometrylearning.com/lin/">Prof. Lin Gao</a> and
                     <a href="https://people.ucas.edu.cn/~sgshan?language=en">Prof. Shiguang Shan</a> at the Institute of
@@ -47,7 +51,7 @@
                     <a href="data/Dingxi Zhang_CV.pdf">CV</a> &nbsp;/&nbsp;
                     <a href="https://github.com/Kristen-Z/">Github</a> &nbsp;/&nbsp;
                     <a href="https://scholar.google.com/citations?user=Z444Ix8AAAAJ">Google Scholar</a> &nbsp;/&nbsp;
-                    <a href="https://www.linkedin.com/in/dingxi-zhang-211721331/">Linkedln</a> &nbsp;/&nbsp;
+                    <a href="https://www.linkedin.com/in/dingxi-zhang-211721331/">LinkedIn</a> &nbsp;/&nbsp;
                     <a href="https://x.com/dingxi39482">X</a>
                   </p>
                 </td>
@@ -67,7 +71,7 @@
                 <td style="padding:20px;width:100%;vertical-align:middle">
                   <h2>Research</h2>
                   <p>
-                    My research interests are 3D vision, graphics and machine learning.
+                    My research interests are 3D vision, graphics and robotics.
                     Specifically, my current focus centers on developing efficient neural representations and devising
                     user-friendly and effective methods for interacting with 3D objects and scenes. </p>
                 </td>
@@ -78,6 +82,55 @@
           <table
             style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
             <tbody>
+
+              <tr onmouseout="comind_stop()" onmouseover="comind_start()">
+                <td style="padding:20px;width:25%;vertical-align:middle">
+                  <div class="one">
+                    <div class="two" id='comind_image'>
+                      <img src='images/comind.png' width="160">
+                    </div>
+                    <img src='images/comind.png' width="160">
+                  </div>
+                  <script type="text/javascript">
+                    function comind_start() {
+                      document.getElementById('comind_image').style.opacity = "1";
+                    }
+
+                    function comind_stop() {
+                      document.getElementById('comind_image').style.opacity = "0";
+                    }
+                    comind_stop()
+                  </script>
+                </td>
+                <td style="padding:20px;width:75%;vertical-align:top;">
+                  <a href="https://comind.ethz.ch/">
+                    <span class="papertitle">CoMind: Understanding Collaborative Human Activity from Multiple Minds and
+                      Views</span>
+                  </a>
+                  <br>
+                  <a href="https://scholar.google.com/citations?user=BjEdv_AAAAAJ&hl=en">Alexey Gavryushin*</a>,
+                  <strong>Dingxi Zhang*</strong>,
+                  <a href="https://troyehuang.github.io/">Zhao Huang*</a>,
+                  <a href="https://alexdelitzas.github.io/">Alexandros Delitzas</a>,
+                  Jiaqi Chen,
+                  Ben Ellis,
+                  Cedric Zöllner,
+                  <a href="https://manthan99.github.io/">Manthan Patel</a>,
+                  <a href="https://manuelkaufmann.ch/">Manuel Kaufmann</a>,
+                  <a href="https://people.inf.ethz.ch/marc.pollefeys/">Marc Pollefeys</a>,
+                  <a href="https://xiwang1212.github.io/homepage/">Xi Wang</a>
+                  <br>
+                  <em>ECCV</em>, 2026
+                  <br>
+                  <a href="https://comind.ethz.ch/">project</a>
+                  <p></p>
+                  <p>
+                    A dual-view egocentric benchmark for collaborative human activity understanding, capturing
+                    synchronized head-mounted video from two participants along with dense 3D scene reconstructions
+                    and high-resolution object scans across three social-reasoning tasks.
+                  </p>
+                </td>
+              </tr>
 
               <tr onmouseout="megaflow_stop()" onmouseover="megaflow_start()">
                 <td style="padding:20px;width:25%;vertical-align:middle">
@@ -108,7 +161,7 @@
                   <a href="https://people.inf.ethz.ch/marc.pollefeys/">Marc Pollefeys</a>,
                   <a href="https://haofeixu.github.io/">Haofei Xu</a>
                   <br>
-                  <em>arXiv preprint</em>, 2026
+                  <em>ECCV</em>, 2026
                   <br>
                   <a href="https://arxiv.org/abs/2603.25739">paper</a> / <a
                     href="https://kristen-z.github.io/projects/megaflow/">project</a> / <a
@@ -151,7 +204,7 @@
                   <a href="https://people.wgtn.ac.nz/fanglue.zhang">Fang-Lue Zhang</a>,
                   <a href="https://lynnho.github.io/">Zhenliang He</a>,
                   <a href="https://people.ucas.edu.cn/~sgshan">Shiguang Shan</a>,
-                  <a href="http://www.geometrylearning.com/lin/">Lin Gao*</a>
+                  <a href="http://www.geometrylearning.com/lin/">Lin Gao</a>
                   <br>
                   <em>TPAMI</em>, 2025
                   <br>
@@ -242,7 +295,7 @@
                   <strong>Dingxi Zhang</strong>,
                   <a href="https://people.ucas.edu.cn/~yaran?language=en">Yaran Chen*</a>,
                   Haoran Liu,
-                  <a href="https://people.ucas.ac.cn/~zhaodongbin?language=en">Dongbin Zhao</a>,
+                  <a href="https://people.ucas.ac.cn/~zhaodongbin?language=en">Dongbin Zhao</a>
                   <br>
                   <em>IROS</em>, 2025 (<span style="color: #f70505;">Oral</span>)
                   <br>
@@ -282,7 +335,7 @@
                   Xiao-Juan Li,
                   <strong>Dingxi Zhang</strong>,
                   <a href="http://people.geometrylearning.com/csy/">Shu-Yu Chen</a>,
-                  <a href="http://people.geometrylearning.com/lfl/">Feng-Lin Liu</a>,
+                  <a href="http://people.geometrylearning.com/lfl/">Feng-Lin Liu</a>
                   <br>
                   <em>CVPR</em>, 2024
                   <br>
@@ -332,7 +385,7 @@
                   <a href="https://github.com/Kristen-Z/LocalSDF/">code</a>
                   <p></p>
                   <p>
-                    Using an weight-encoded Neural Network to approximate a grid of latent codes, while sharing the
+                    Using a weight-encoded Neural Network to approximate a grid of latent codes, while sharing the
                     decoder across the entire
                     category to achieve better reconstruction quality while using less memory per sample to store single
                     geometry.
@@ -343,13 +396,170 @@
             </tbody>
           </table>
 
-          <!-- EXPERIENCE -->
+          <!-- EDUCATION -->
           <table
             style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
             <tbody>
               <tr>
                 <td style="padding:20px;width:100%;vertical-align:middle">
-                  <h2>Experience</h2>
+                  <h2>Education</h2>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table
+            style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
+            <tbody>
+              <tr onmouseout="eth_stop()" onmouseover="eth_start()">
+                <td style="padding:10px;width:25%;vertical-align:middle">
+                  <div class="one" style="height: 130px;">
+                    <div class="two" id='eth_image'>
+                      <img src='images/eth.png' style="width:auto; height:auto; max-width:100%;">
+                    </div>
+                    <img src='images/eth.png' style="width:auto; height:auto; max-width:100%;">
+                  </div>
+                  <script type="text/javascript">
+                    function eth_start() {
+                      document.getElementById('eth_image').style.opacity = "1";
+                    }
+
+                    function eth_stop() {
+                      document.getElementById('eth_image').style.opacity = "0";
+                    }
+                    eth_stop()
+                  </script>
+                </td>
+                <td style="padding:10px;width:75%;vertical-align:top;">
+                  <span class="papertitle">ETH Zurich, Switzerland</span>
+                  <br>
+                  Master of Science in Computer Science, ESOP Scholar
+                  <br>
+                  Advisor: <a href="https://people.inf.ethz.ch/pomarc/">Prof. Marc Pollefeys</a>
+                  <br>
+                  Sep 2024 - Jul 2026
+
+                </td>
+              </tr>
+
+              <tr onmouseout="brown_stop()" onmouseover="brown_start()">
+                <td style="padding:10px;width:25%;vertical-align:middle">
+                  <div class="one" style="height: 130px;">
+                    <div class="two" id='brown_image'>
+                      <img src='images/brown.png' style="width:auto; height:auto; max-width:100%;">
+                    </div>
+                    <img src='images/brown.png' style="width:auto; height:auto; max-width:100%;">
+                  </div>
+                  <script type="text/javascript">
+                    function brown_start() {
+                      document.getElementById('brown_image').style.opacity = "1";
+                    }
+
+                    function brown_stop() {
+                      document.getElementById('brown_image').style.opacity = "0";
+                    }
+                    brown_stop()
+                  </script>
+                </td>
+                <td style="padding:10px;width:75%;vertical-align:top;">
+                  <span class="papertitle">Brown University, Providence, RI</span>
+                  <br>
+                  Visiting Student
+                  <br>
+                  Host: <em><a href="https://ivl.cs.brown.edu/">Interactive 3D Vision & Learning Lab</a></em>
+                  <br>
+                  Advisor: <a href="https://cs.brown.edu/people/ssrinath/">Prof. Srinath Sridhar</a> and <a
+                    href="https://dritchie.github.io/">Prof. Daniel Ritchie</a>
+                  <br>
+                  Jun 2023 - Oct 2023
+
+                </td>
+              </tr>
+
+              <tr onmouseout="mit_stop()" onmouseover="mit_start()">
+                <td style="padding:10px;width:25%;vertical-align:middle">
+                  <div class="one" style="height: 130px;">
+                    <div class="two" id='mit_image'>
+                      <img src='images/mit.png' style="width:auto; height:auto; max-width:100%;">
+                    </div>
+                    <img src='images/mit.png' style="width:auto; height:auto; max-width:100%;">
+                  </div>
+                  <script type="text/javascript">
+                    function mit_start() {
+                      document.getElementById('mit_image').style.opacity = "1";
+                    }
+
+                    function mit_stop() {
+                      document.getElementById('mit_image').style.opacity = "0";
+                    }
+                    mit_stop()
+                  </script>
+                </td>
+                <td style="padding:10px;width:75%;vertical-align:top;">
+                  <span class="papertitle">MIT, Cambridge, MA</span>
+                  <br>
+                  Exchange Student, GPA: 5.0/5.0
+                  <br>
+                  UROP Intern at <em><a href="https://www.scenerepresentations.org/">Scene Representation Group</a></em>
+                  & <em><a href="https://groups.csail.mit.edu/gdpgroup/">Geometric Data Processing Group</a></em>, MIT
+                  CSAIL
+                  <br>
+                  UROP Intern at <em><a href="https://robots.media.mit.edu/">Personal Robot Group</a></em>, MIT Media
+                  Lab
+                  <br>
+                  Feb 2023 - Jun 2023
+
+                </td>
+              </tr>
+
+              <tr onmouseout="ucas_stop()" onmouseover="ucas_start()">
+                <td style="padding:10px;width:25%;vertical-align:middle">
+                  <div class="one" style="height: 150px;">
+                    <div class="two" id='ucas_image'>
+                      <img src='images/ucas.png' style="width:150px; height:auto; max-width:100%;">
+                    </div>
+                    <img src='images/ucas.png' style="width:150px; height:auto; max-width:100%;">
+                  </div>
+                  <script type="text/javascript">
+                    function ucas_start() {
+                      document.getElementById('ucas_image').style.opacity = "1";
+                    }
+
+                    function ucas_stop() {
+                      document.getElementById('ucas_image').style.opacity = "0";
+                    }
+                    ucas_stop()
+                  </script>
+                </td>
+                <td style="padding:10px;width:75%;vertical-align:top;">
+                  <span class="papertitle">University of Chinese Academy of Sciences, Beijing</span>
+                  <br>
+                  Bachelor of Computer Science, GPA: 3.96/4.0
+                  <br>
+                  Sep 2020 - Jun 2024
+                  <br><br>
+                  Outstanding Graduate Student
+                  <br>
+                  Outstanding Thesis Awards
+                  <br>
+                  2023 National Scholarship
+                  <br>
+                  2022 SenseTime Scholarship
+                  <br>
+                  Merit Student of Beijing
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          <!-- INDUSTRY -->
+          <table
+            style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
+            <tbody>
+              <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                  <h2>Working Experience</h2>
                 </td>
               </tr>
             </tbody>
@@ -420,114 +630,6 @@
                 </td>
               </tr>
 
-              <tr onmouseout="brown_stop()" onmouseover="brown_start()">
-                <td style="padding:10px;width:25%;vertical-align:middle">
-                  <div class="one" style="height: 130px;">
-                    <div class="two" id='brown_image'>
-                      <img src='images/brown.png' style="width:auto; height:auto; max-width:100%;">
-                    </div>
-                    <img src='images/brown.png' style="width:auto; height:auto; max-width:100%;">
-                  </div>
-                  <script type="text/javascript">
-                    function brown_start() {
-                      document.getElementById('brown_image').style.opacity = "1";
-                    }
-
-                    function brown_stop() {
-                      document.getElementById('brown_image').style.opacity = "0";
-                    }
-                    brown_stop()
-                  </script>
-                </td>
-                <td style="padding:10px;width:75%;vertical-align:top;">
-                  <span class="papertitle">Brown University, Providence, RI</span>
-                  <br>
-                  Visiting Student
-                  <br>
-                  Host: <em><a href="https://ivl.cs.brown.edu/">Interactive 3D Vison & Learning Lab</a></em>
-                  <br>
-                  Advisor: <a href="https://cs.brown.edu/people/ssrinath/">Prof. Srinath Sridhar</a> and <a
-                    href="https://dritchie.github.io/">Prof. Daniel Ritchie</a>
-                  <br>
-                  Jun 2023 - Oct 2023
-
-                </td>
-              </tr>
-
-              <tr onmouseout="mit_stop()" onmouseover="mit_start()">
-                <td style="padding:10px;width:25%;vertical-align:middle">
-                  <div class="one" style="height: 130px;">
-                    <div class="two" id='mit_image'>
-                      <img src='images/mit.png' style="width:auto; height:auto; max-width:100%;">
-                    </div>
-                    <img src='images/mit.png' style="width:auto; height:auto; max-width:100%;">
-                  </div>
-                  <script type="text/javascript">
-                    function mit_start() {
-                      document.getElementById('mit_image').style.opacity = "1";
-                    }
-
-                    function mit_stop() {
-                      document.getElementById('mit_image').style.opacity = "0";
-                    }
-                    mit_stop()
-                  </script>
-                </td>
-                <td style="padding:10px;width:75%;vertical-align:top;">
-                  <span class="papertitle">MIT, Cambridge, MA</span>
-                  <br>
-                  Exchange Student, GPA: 5.0/5.0
-                  <br>
-                  UROP Intern at <em><a href="https://www.scenerepresentations.org/">Scene Representation Group</a></em>
-                  & <em><a href="https://groups.csail.mit.edu/gdpgroup/">Geometric Data Processing Group</a></em>, MIT
-                  CSAIL
-                  <br>
-                  UROP Intern at <em><a href="https://robots.media.mit.edu/">Personal Robot Group</a></em>, MIT Media
-                  Lab
-                  <br>
-                  Feb 2023 - Jun 2023
-
-                </td>
-              </tr>
-
-              <tr onmouseout="ucas_stop()" onmouseover="ucas_start()">
-                <td style="padding:10px;width:25%;vertical-align:middle">
-                  <div class="one" style="height: 150px;">
-                    <div class="two" id='ucas_image'>
-                      <img src='images/ucas.png' style="width:150px; height:auto; max-width:100%;">
-                    </div>
-                    <img src='images/ucas.png' style="width:150px; height:auto; max-width:100%;">
-                  </div>
-                  <script type="text/javascript">
-                    function ucas_start() {
-                      document.getElementById('ucas_image').style.opacity = "1";
-                    }
-
-                    function ucas_stop() {
-                      document.getElementById('ucas_image').style.opacity = "0";
-                    }
-                    ucas_stop()
-                  </script>
-                </td>
-                <td style="padding:10px;width:75%;vertical-align:top;">
-                  <span class="papertitle">University of Chinese Academy of Sciences, Beijing</span>
-                  <br>
-                  Bachelor of Compute Science, GPA: 3.96/4.0
-                  <br>
-                  Sep 2020 - Jun 2024
-                  <br><br>
-                  Outstanding Graduate Student
-                  <br>
-                  Outstanding Thesis Awards
-                  <br>
-                  2023 National Scholarship
-                  <br>
-                  2022 SenseTime Scholarship
-                  <br>
-                  Merit Student of Beijing
-                </td>
-              </tr>
-
             </tbody>
           </table>
 
@@ -538,7 +640,8 @@
               <tr>
                 <td style="padding:20px;width:100%;vertical-align:middle">
                   <h2>Academic Service</h2>
-                  <p><strong>Conference Reviewer:</strong> ICRA 2026, CVPR 2026</p>
+                  <p><strong>Conference Reviewer:</strong> ICRA 2026, CVPR 2026, ECCV 2026</p>
+                  <p><strong>Journal Reviewer:</strong> TPAMI, TVCG, Computer Graphics Forum</p>
                 </td>
               </tr>
             </tbody>
@@ -598,9 +701,10 @@
                   <a href="https://github.com/Cassie-Lim/pose_eval">code</a>
                   <p></p>
                   <p>
-                    An efficient and complete system for cervical spine prevention on common PC device,
-                    it can detect cervical posture in real-time, provide timely feedback to remind users to pose
-                    correctly and an interactive game to guide the user to exercise their cervical spine scientifically.
+                    An efficient and complete system for cervical spine prevention on common PC devices.
+                    It can detect cervical posture in real-time, provide timely feedback to remind users to pose
+                    correctly, and offers an interactive game to guide the user to exercise their cervical spine
+                    scientifically.
 
                   </p>
                 </td>
@@ -644,7 +748,7 @@
                   <p>
                     A highly compatible and robust platform with impressive performance to construct an artificially
                     organized signaling pathway based on synthetic biology.
-                    We designed a NLP-based search tool Powered by Llama2 and BERT for iGEM standard parts, Ask NOX.
+                    We designed an NLP-based search tool powered by Llama2 and BERT for iGEM standard parts, Ask NOX.
                   </p>
                 </td>
               </tr>
@@ -682,9 +786,9 @@
                   <a href="https://gitlab.igem.org/2022/software-tools/ucas-china">code</a>
                   <p></p>
                   <p>
-                    A system capable of producing nutritious, delicious, and highly user-free meal replacement foods by
-                    lactic acid bacteria modified by synthetic biology technology.
-                    We design a portable IoT machine to make meal replacement, an application for our machine & <a
+                    A system capable of producing nutritious, delicious, and highly user-friendly meal replacement
+                    foods using lactic acid bacteria modified by synthetic biology technology.
+                    We designed a portable IoT machine to make meal replacement, an application for our machine & <a
                       href="https://2022.igem.wiki/ucas-china/oh-my-gut-en">an entertaining science
                       game</a> and a convenient tool for creating wiki.
                   </p>
@@ -725,9 +829,9 @@
                   <a href="https://github.com/igemsoftware2021/UCAS_China">code</a>
                   <p></p>
                   <p>
-                    A comprehensive caffeine intake management system and provide users with scientific and proper
+                    A comprehensive caffeine intake management system that provides users with scientific and proper
                     caffeine intake recommendations.
-                    We design an application Caffeine-monitor to achieve this and an online education platform iGEM
+                    We designed an application Caffeine-monitor to achieve this and an online education platform iGEM
                     EduHub for better Synthetic Biology education.
                   </p>
                 </td>
