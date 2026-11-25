@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
-  <link rel="stylesheet" href="static/css/style.css?v=202611251821">
+  <link rel="stylesheet" href="static/css/style.css?v=202611252234">
 
   <script type="importmap">
     { "imports": {
@@ -76,11 +76,14 @@
       <div class="links">
         <a class="btn" href="#" data-todo="arXiv abs"><i class="ai ai-arxiv"></i><span>arXiv</span></a>
         <a class="btn" href="https://github.com/Kristen-Z/StereoViT"><i class="fab fa-github"></i><span>Code</span></a>
-        <!-- TODO(link): Hugging Face Space URL once the demo is up -->
-        <a class="btn" href="#" data-todo="Hugging Face demo"><i class="fas fa-rocket"></i><span>Demo</span></a>
+        <a class="btn" href="https://github.com/Kristen-Z/StereoViT"><i class="fas fa-rocket"></i><span>Demo</span></a>
         <a class="btn" href="https://huggingface.co/Kristen-Z/StereoViT"><span class="hf">🤗</span><span>Models</span></a>
         <a class="btn ghost" href="#bibtex"><i class="fas fa-quote-right"></i><span>BibTeX</span></a>
       </div>
+    </div>
+    <div class="hero-strip">
+      <a class="strip-cap" href="#robot"><span class="dot"></span>Same model, frozen: diffusion policies on StereoViT features, in unseen scenes · 2×</a>
+      <div class="hreel-row" aria-label="Robot rollouts in unseen scenes"><div class="hreel-track"><video src="static/hero/hero_strip_a.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_strip_b.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_strip_a.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_strip_b.mp4" muted loop playsinline autoplay preload="auto"></video></div></div>
     </div>
     <div class="hero-caption">
       <span class="dot"></span><span>Live 3D · StereoViT-L point cloud from one stereo pair<span class="hide-s"> · <span class="kbd">drag</span> to look around</span></span>
@@ -110,11 +113,11 @@
   <!-- ───────────── Video ───────────── -->
   <section class="section" id="video">
     <div class="container narrow">
-      <h2 class="h2 reveal"><span class="eyebrow">Overview</span>Five minutes with StereoViT</h2>
+      <h2 class="h2 reveal">Overview video</h2>
       <!-- YouTube: put the video id in data-youtube (the local mp4 is then not used and can be deleted) -->
       <div class="video-frame reveal" data-youtube="">
         <video controls preload="none" playsinline poster="static/img/video_poster.jpg">
-          <source src="static/video/stereovit_overview.mp4" type="video/mp4">
+          <source src="static/video/stereovit_overview_50s.mp4" type="video/mp4">
         </video>
       </div>
     </div>
@@ -292,9 +295,29 @@
         <div id="mean-bars"></div>
       </div>
 
-      <div class="reel-head reveal"><h3>More StereoViT rollouts in unseen scenes</h3></div>
+      <div class="rdepth reveal" id="rdepth">
+        <h3>Depth in the robot's workspace</h3>
+        <p class="rdepth-lede">Top camera of the robot, in the training scenes. Drag the handle to compare StereoViT with the ZED camera's own depth and with stereo baselines.</p>
+        <div class="tabs dark" id="rd-tabs"></div>
+        <div class="cmp-bar"><span class="cmp-bar-label">Compare with</span><div class="seg dark" id="rd-methods"></div></div>
+        <div class="cmp-stage">
+          <div class="cmp big" id="rd-main">
+            <img class="cmp-a" alt="Baseline depth">
+            <img class="cmp-b" alt="StereoViT depth">
+            <div class="cmp-handle"><span></span></div>
+            <span class="cmp-tag a" id="rd-tag-a">ZED depth</span><span class="cmp-tag b ours">StereoViT</span>
+          </div>
+          <div class="cmp-side">
+            <p class="cmp-text" id="rd-text"></p>
+            <div class="thumbs">
+              <figure><img id="rd-input" alt="Left camera image"><figcaption>Left image</figcaption></figure>
+            </div>
+            <p class="rd-note">Inverse depth, near = red, far = blue; one colour scale per scene. Black = no sensor depth.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="reel" id="reel"><div class="reel-row" data-dir="1"></div><div class="reel-row" data-dir="-1"></div></div>
   </section>
 
   <!-- ───────────── More in the paper ───────────── -->
@@ -338,7 +361,7 @@
 
   <div class="lightbox" id="lightbox"><img alt=""></div>
 
-  <script src="static/js/main.js?v=202611251821" defer></script>
-  <script type="module" src="static/js/pc.js?v=202611251821"></script>
+  <script src="static/js/main.js?v=202611252234" defer></script>
+  <script type="module" src="static/js/pc.js?v=202611252234"></script>
 </body>
 </html>

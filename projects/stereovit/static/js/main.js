@@ -1,4 +1,4 @@
-/* StereoViT project page: UI (nav, reveal, counters, anaglyph title, plot, drag-compare, comparisons, robot results, reel). */
+/* StereoViT project page: UI (nav, reveal, counters, anaglyph title, plot, drag-compare, comparisons, robot results). */
 (() => {
   const V = (document.currentScript && new URL(document.currentScript.src).search) || '';  // cache-busting for data files
   const $ = (s, r = document) => r.querySelector(s);
@@ -268,7 +268,7 @@
   }
   cmpMain.closest('.reveal').addEventListener('reveal', () => setTimeout(cmpMain.sweep, 400), { once: true });
 
-  /* ───── real robot: per-task comparison, mean bars, reel ───── */
+  /* ───── real robot: per-task comparison, mean bars ───── */
   const METHODS = ['StereoViT (ours)', 'FoundationStereo', 'StereoPolicy', 'Stereo-DP', 'DP'];
   // task success (%) over 20 rollouts per policy in unseen scenes (latest results, all six tasks)
   const SR = {
@@ -305,7 +305,6 @@
     });
     selectTask(0, false);
     buildMean();
-    buildReel(data.reel);
   });
 
   function baseTiles() { return $$('#base-grid figure'); }
@@ -397,51 +396,46 @@
     }, { once: true });
   }
 
-  /* reel: two rows of StereoViT rollouts drifting in opposite directions; videos load when the reel is near */
-  function buildReel(reel) {
-    const rows = $$('.reel-row');
-    const parts = [reel.slice(0, 9), reel.slice(9)];
-    const state = rows.map((row, r) => ({ row, dir: +row.dataset.dir, tiles: [] }));
-    state.forEach((s, r) => {
-      const W0 = Math.max(innerWidth, 1200);
-      const list = parts[r];
-      const reps = Math.max(1, Math.ceil((W0 + 400) / (list.length * 372)));
-      for (let k = 0; k < reps; k++) list.forEach(c => {
-        const el = document.createElement('div');
-        el.className = 'reel-tile';
-        el.innerHTML = `<video muted loop playsinline preload="none" poster="static/robot/${c.file}.jpg"></video><span>${c.task}</span>`;
-        el.dataset.src = `static/robot/${c.file}.mp4`;
-        s.row.appendChild(el);
-        s.tiles.push(el);
-      });
+  /* ───── real robot: depth from the robot's top camera, ZED sensor depth and stereo baselines vs StereoViT ───── */
+  const RD_NAME = { zed: 'ZED depth (sensor)', fs: 'FoundationStereo', waft: 'WAFT-Stereo' };
+  const RD = [
+    ['pour_glass', 'Pour Glass', 'The ZED depth leaves holes in the wine glass; StereoViT keeps it whole.'],
+    ['place_lid', 'Place Lid', 'The steel pot and the glass lid break up the ZED depth; StereoViT keeps both, down to the knob on the lid.'],
+    ['insert_straw', 'Insert Straw', 'The glass bottle and the edges of the arm break up the ZED depth. The stereo models recover the bottle, and StereoViT also keeps the thin cable whole.'],
+    ['place_riser', 'Place Riser', 'Close up, the white arm has little texture: the ZED depth has large holes and WAFT breaks up, while StereoViT stays smooth.'],
+  ];
+  const rdMain = makeCompare($('#rd-main'));
+  let rdIdx = 0, rdMethod = 'zed';
+  RD.forEach((r, i) => {
+    const b = document.createElement('button');
+    b.textContent = r[1];
+    b.addEventListener('click', () => selectRd(i));
+    $('#rd-tabs').appendChild(b);
+  });
+  function selectRd(i) {
+    const [key, , text] = RD[i];
+    rdIdx = i;
+    $$('#rd-tabs button').forEach((b, k) => b.classList.toggle('on', k === i));
+    const seg = $('#rd-methods');
+    seg.innerHTML = '';
+    Object.keys(RD_NAME).forEach(m => {
+      const b = document.createElement('button');
+      b.textContent = RD_NAME[m];
+      b.classList.toggle('on', m === rdMethod);
+      b.addEventListener('click', () => { rdMethod = m; selectRd(rdIdx); });
+      seg.appendChild(b);
     });
-    let on = false, last = performance.now(), off = 0, loaded = false;
-    new IntersectionObserver(es => {
-      on = es[0].isIntersecting;
-      if (on && !loaded) {
-        loaded = true;
-        state.forEach(s => s.tiles.forEach(el => { $('video', el).src = el.dataset.src; }));
-      }
-      state.forEach(s => s.tiles.forEach(el => { const v = $('video', el); if (on) v.play().catch(() => {}); else v.pause(); }));
-      if (on) { last = performance.now(); requestAnimationFrame(frame); }
-    }, { rootMargin: '200px 0px' }).observe($('#reel'));
-    function frame(t) {
-      if (!on) return;
-      off += (REDUCE ? 0 : 38) * Math.min(0.05, (t - last) / 1000);
-      last = t;
-      layout();
-      requestAnimationFrame(frame);
-    }
-    function layout() {
-      state.forEach(s => {
-        const tw = s.tiles[0].offsetWidth, P = tw + 20, L = s.tiles.length * P;
-        s.tiles.forEach((el, i) => {
-          const x = ((i * P + s.dir * off) % L + L) % L - P;
-          el.style.transform = `translate3d(${x}px,0,0)`;
-        });
-      });
-    }
-    layout();
-    addEventListener('resize', layout);
+    $('.cmp-a', rdMain).src = `static/rdepth/${key}_${rdMethod}.jpg${V}`;
+    $('.cmp-b', rdMain).src = `static/rdepth/${key}_ours.jpg${V}`;
+    $('#rd-tag-a').textContent = RD_NAME[rdMethod];
+    $('#rd-text').textContent = text;
+    $('#rd-input').src = `static/rdepth/${key}_img.jpg${V}`;
   }
+  new IntersectionObserver((es, ob) => {
+    if (!es[0].isIntersecting) return;
+    ob.disconnect();
+    selectRd(0);
+    RD.forEach(([k]) => ['img', 'ours', ...Object.keys(RD_NAME)].forEach(m => { const im = new Image(); im.src = `static/rdepth/${k}_${m}.jpg${V}`; }));
+  }, { rootMargin: '800px 0px' }).observe($('#rdepth'));
+  $('#rdepth').addEventListener('reveal', () => setTimeout(rdMain.sweep, 400), { once: true });
 })();

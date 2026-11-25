@@ -54,15 +54,14 @@ class Viewer {
     this.camera = new THREE.PerspectiveCamera(40, 1, 0.005, 500);
     this.controls = new OrbitControls(this.camera, canvas);
     Object.assign(this.controls, { enableDamping: true, dampingFactor: 0.08, rotateSpeed: 0.55, zoomSpeed: 0.7,
-      enableZoom: this.opt.zoom, enablePan: this.opt.pan, minPolarAngle: 0.35 * Math.PI, maxPolarAngle: 0.65 * Math.PI,
-      minAzimuthAngle: -Math.PI / 3, maxAzimuthAngle: Math.PI / 3 });
+      enableZoom: this.opt.zoom, enablePan: this.opt.pan });  // free 360 orbit
     this.mat = new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: FRAG,
       uniforms: { uScale: { value: 1 }, uFoot: { value: 0.002 }, uMul: { value: this.opt.mul } } });
     this.auto = true;
     this.idleSince = -1e9;
     this.mouse = { x: 0, y: 0 };
     this.target = new THREE.Vector3();
-    this.controls.addEventListener('start', () => { this.dragging = true; });
+    this.controls.addEventListener('start', () => { this.dragging = true; if (!this.opt.still) this.auto = false; });  // interactive: stay where the user leaves it
     this.controls.addEventListener('end', () => { this.dragging = false; this.idleSince = performance.now(); });
     this.visible = true;
     new ResizeObserver(() => this.resize()).observe(canvas);
@@ -85,10 +84,19 @@ class Viewer {
     // frac: share of the canvas width the image spans (hero: a floating cloud on the right; phones: fills the screen)
     let frac = asp > 1.25 ? this.opt.frac : this.opt.fracNarrow;
     if (this.opt.maxW && asp > 1.25) frac = Math.min(frac, this.opt.maxW / w);  // cap the cloud width on wide screens
+    if (this.opt.avoid && asp > 1.25) {
+      // hero: put the cloud in the free space right of the title block, never under the text
+      const cr = this.canvas.getBoundingClientRect();
+      const R = Math.max(...[...document.querySelectorAll(this.opt.avoid)].map(e => e.getBoundingClientRect().right - cr.left));
+      const L = R + 12, Rr = w - 24, avail = Rr - L;  // the cloud may tuck slightly under the text edge: close, not boxed off
+      if (avail > 320) { frac = Math.min(frac, 0.9 * avail / w); this._side = (L + Rr) / 2 + 0.045 * avail - w / 2; } else this._side = 0;
+    } else this._side = 0;
     const t = frac ? tx / (asp * frac) : tFitH * 1.06;
     this.camera.fov = 2 * Math.atan(t) * 180 / Math.PI;
     this.camera.aspect = asp;
-    if (this.opt.shift && asp > 1.25) this.camera.setViewOffset(w, h, -Math.min(w * this.opt.shift, this.opt.maxShift || 1e9), 0, w, h);
+    const side = this._side;
+    if (side) this.camera.setViewOffset(w, h, -side, 0, w, h);
+    else if (this.opt.shift && asp > 1.25) this.camera.setViewOffset(w, h, -Math.min(w * this.opt.shift, this.opt.maxShift || 1e9), 0, w, h);
     else this.camera.clearViewOffset();
     this.camera.updateProjectionMatrix();
     const v = new THREE.Vector2();
@@ -122,6 +130,8 @@ class Viewer {
     this.camera.updateProjectionMatrix();
     this.controls.update();
     this.idleSince = performance.now() - 5000;
+    this.auto = true;
+    this.onHome && this.onHome();
   }
   kick() { if (!this.raf) this.raf = requestAnimationFrame(t => this.frame(t)); }
   frame(t) {
@@ -133,9 +143,13 @@ class Viewer {
       const still = this.opt.still;  // hero: hold one slightly turned view instead of orbiting
       const az = still ? still[0] * Math.PI / 180 : A * Math.sin(s * 0.32) + this.mouse.x * 0.12;
       const el = still ? still[1] * Math.PI / 180 : 0.35 * A * Math.sin(s * 0.21 + 1) - this.mouse.y * 0.08;
-      const r = this.camera.position.distanceTo(this.controls.target) || this.zmed;
-      const want = new THREE.Vector3(r * Math.sin(az) * Math.cos(el), r * Math.sin(el), r * Math.cos(az) * Math.cos(el)).add(this.controls.target);
-      this.camera.position.lerp(want, 0.04);
+      // ease the angles (not the position), so returning from behind swings round instead of cutting through the scene
+      const off = this.camera.position.clone().sub(this.controls.target), sph = new THREE.Spherical().setFromVector3(off);
+      if (!sph.radius) sph.radius = this.zmed;
+      const wantT = az, wantP = Math.PI / 2 - el;
+      let dT = wantT - sph.theta; dT = Math.atan2(Math.sin(dT), Math.cos(dT));
+      sph.theta += dT * 0.04; sph.phi += (wantP - sph.phi) * 0.04;
+      this.camera.position.setFromSpherical(sph).add(this.controls.target);
     }
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
@@ -158,8 +172,9 @@ async function main() {
     return;
   }
   // hero: tabletop scene, no zoom / pan so the page still scrolls
-  const hero = new Viewer(document.getElementById('hero-canvas'), { amp: 16, still: [-14, 5], frac: 0.55, maxW: 780, maxShift: 400, fracNarrow: 1.5, shift: 0.25, zoom: false, pan: false, maxDpr: 1.5, mul: 1.8 });
+  const hero = new Viewer(document.getElementById('hero-canvas'), { amp: 16, still: [-14, 5], avoid: '.hero-title, .hero-sub, .authors, .affils, .links .btn', frac: 0.6, maxW: 880, maxShift: 400, fracNarrow: 1.5, shift: 0.25, zoom: false, pan: false, maxDpr: 1.5, mul: 1.8 });
   hero.show(heroScene);
+  document.fonts && document.fonts.ready.then(() => hero.fit());
 
   // interactive section
   const v = new Viewer(document.getElementById('pc-canvas'), { amp: 22 });
@@ -189,6 +204,9 @@ async function main() {
   });
   const orbitBtn = document.getElementById('pc-orbit');
   orbitBtn.addEventListener('click', () => { v.auto = !v.auto; orbitBtn.classList.toggle('on', v.auto); });
+  const syncOrbit = () => orbitBtn.classList.toggle('on', v.auto);  // dragging pauses the orbit, reset / new scene resumes it
+  v.controls.addEventListener('start', syncOrbit);
+  v.onHome = syncOrbit;
   document.getElementById('pc-reset').addEventListener('click', () => v.home());
   // load the section's first cloud once the user gets close
   new IntersectionObserver((es, ob) => {
