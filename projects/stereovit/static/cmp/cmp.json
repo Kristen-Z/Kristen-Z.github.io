@@ -1,0 +1,35 @@
+[
+ {
+  "key": "glassdoors",
+  "name": "ETH3D \u00b7 glass doors",
+  "methods": [
+   "fs",
+   "waft",
+   "s2m2"
+  ],
+  "gt": true,
+  "aspect": 1.6474
+ },
+ {
+  "key": "bin",
+  "name": "XYZ-IBD \u00b7 metal rods in a bin",
+  "methods": [
+   "fs",
+   "waft",
+   "s2m2"
+  ],
+  "gt": true,
+  "aspect": 1.7778
+ },
+ {
+  "key": "crates",
+  "name": "ETH3D \u00b7 wooden crates",
+  "methods": [
+   "fs",
+   "waft",
+   "s2m2"
+  ],
+  "gt": true,
+  "aspect": 1.9248
+ }
+]

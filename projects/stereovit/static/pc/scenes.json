@@ -1,0 +1,58 @@
+[
+ {
+  "key": "tabletop",
+  "name": "Tabletop",
+  "n": 420000,
+  "aspect": 1.7778,
+  "fx": 1006.49,
+  "foot": 0.0014596464833119376
+ },
+ {
+  "key": "flowerbed",
+  "name": "Flowerbed",
+  "n": 420000,
+  "aspect": 1.7778,
+  "fx": 520.56,
+  "foot": 0.002608074826838512
+ },
+ {
+  "key": "cloth",
+  "name": "Cloth",
+  "n": 420000,
+  "aspect": 1.7778,
+  "fx": 520.6,
+  "foot": 0.0026777236944576783
+ },
+ {
+  "key": "bathroom",
+  "name": "Bathroom sink",
+  "n": 420000,
+  "aspect": 1.7778,
+  "fx": 520.6,
+  "foot": 0.002595222370356648
+ },
+ {
+  "key": "fence",
+  "name": "Gilded fence",
+  "n": 420000,
+  "aspect": 1.7778,
+  "fx": 520.56,
+  "foot": 0.00208493081322245
+ },
+ {
+  "key": "checkered",
+  "name": "Checkered table",
+  "n": 420000,
+  "aspect": 1.7778,
+  "fx": 520.6,
+  "foot": 0.0026503401096537194
+ },
+ {
+  "key": "motorcycle",
+  "name": "Middlebury \u00b7 motorcycle",
+  "n": 420000,
+  "aspect": 1.4909,
+  "fx": 1726.4,
+  "foot": 0.0009088360672429249
+ }
+]

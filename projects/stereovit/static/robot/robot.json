@@ -1,0 +1,242 @@
+{
+ "tasks": [
+  {
+   "task": "Pour Glass",
+   "slug": "pour_glass",
+   "unseen": "New tablecloth and objects",
+   "base": [
+    {
+     "key": "foundationstereo",
+     "name": "FoundationStereo",
+     "stopped": false
+    },
+    {
+     "key": "stereopolicy",
+     "name": "StereoPolicy",
+     "stopped": false
+    },
+    {
+     "key": "stereo6",
+     "name": "Stereo-DP",
+     "stopped": true
+    },
+    {
+     "key": "rgb",
+     "name": "DP",
+     "stopped": true
+    }
+   ],
+   "secs": 7.73
+  },
+  {
+   "task": "Place Lid",
+   "slug": "place_lid",
+   "unseen": "New tablecloth and objects",
+   "base": [
+    {
+     "key": "foundationstereo",
+     "name": "FoundationStereo",
+     "stopped": false
+    },
+    {
+     "key": "stereopolicy",
+     "name": "StereoPolicy",
+     "stopped": false
+    },
+    {
+     "key": "stereo6",
+     "name": "Stereo-DP",
+     "stopped": false
+    },
+    {
+     "key": "rgb",
+     "name": "DP",
+     "stopped": false
+    }
+   ],
+   "secs": 7.73
+  },
+  {
+   "task": "Insert Straw",
+   "slug": "insert_straw",
+   "unseen": "New tablecloth and objects",
+   "base": [
+    {
+     "key": "foundationstereo",
+     "name": "FoundationStereo",
+     "stopped": false
+    },
+    {
+     "key": "stereopolicy",
+     "name": "StereoPolicy",
+     "stopped": false
+    },
+    {
+     "key": "stereo6",
+     "name": "Stereo-DP",
+     "stopped": true
+    },
+    {
+     "key": "rgb",
+     "name": "DP",
+     "stopped": true
+    }
+   ],
+   "secs": 9.23
+  },
+  {
+   "task": "Stack Cube",
+   "slug": "stack_cube",
+   "unseen": "Unseen scene: new tablecloth, objects and heights",
+   "base": [
+    {
+     "key": "foundationstereo",
+     "name": "FoundationStereo",
+     "stopped": false
+    },
+    {
+     "key": "stereopolicy",
+     "name": "StereoPolicy",
+     "stopped": false
+    },
+    {
+     "key": "stereo6",
+     "name": "Stereo-DP",
+     "stopped": false
+    },
+    {
+     "key": "rgb",
+     "name": "DP",
+     "stopped": false
+    }
+   ],
+   "secs": 6.37
+  },
+  {
+   "task": "Hang Cup",
+   "slug": "hang_cup",
+   "unseen": "New tablecloth and objects",
+   "base": [
+    {
+     "key": "foundationstereo",
+     "name": "FoundationStereo",
+     "stopped": false
+    },
+    {
+     "key": "stereopolicy",
+     "name": "StereoPolicy",
+     "stopped": false
+    },
+    {
+     "key": "stereo6",
+     "name": "Stereo-DP",
+     "stopped": false
+    },
+    {
+     "key": "rgb",
+     "name": "DP",
+     "stopped": false
+    }
+   ],
+   "secs": 9.23
+  },
+  {
+   "task": "Place Riser",
+   "slug": "place_riser",
+   "unseen": "Unseen scene: new tablecloth, objects and heights",
+   "base": [
+    {
+     "key": "foundationstereo",
+     "name": "FoundationStereo",
+     "stopped": false
+    },
+    {
+     "key": "stereopolicy",
+     "name": "StereoPolicy",
+     "stopped": false
+    },
+    {
+     "key": "stereo6",
+     "name": "Stereo-DP",
+     "stopped": false
+    },
+    {
+     "key": "rgb",
+     "name": "DP",
+     "stopped": false
+    }
+   ],
+   "secs": 7.0
+  }
+ ],
+ "reel": [
+  {
+   "file": "reel_00",
+   "task": "Pour Glass"
+  },
+  {
+   "file": "reel_01",
+   "task": "Place Lid"
+  },
+  {
+   "file": "reel_02",
+   "task": "Insert Straw"
+  },
+  {
+   "file": "reel_03",
+   "task": "Stack Cube"
+  },
+  {
+   "file": "reel_04",
+   "task": "Hang Cup"
+  },
+  {
+   "file": "reel_05",
+   "task": "Place Riser"
+  },
+  {
+   "file": "reel_06",
+   "task": "Pour Glass"
+  },
+  {
+   "file": "reel_07",
+   "task": "Place Lid"
+  },
+  {
+   "file": "reel_08",
+   "task": "Insert Straw"
+  },
+  {
+   "file": "reel_09",
+   "task": "Stack Cube"
+  },
+  {
+   "file": "reel_10",
+   "task": "Hang Cup"
+  },
+  {
+   "file": "reel_11",
+   "task": "Place Riser"
+  },
+  {
+   "file": "reel_12",
+   "task": "Pour Glass"
+  },
+  {
+   "file": "reel_13",
+   "task": "Place Lid"
+  },
+  {
+   "file": "reel_14",
+   "task": "Insert Straw"
+  },
+  {
+   "file": "reel_15",
+   "task": "Hang Cup"
+  },
+  {
+   "file": "reel_16",
+   "task": "Place Riser"
+  }
+ ]
+}

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StereoViT: Stereo Vision Transformer for Robust Robot Manipulation</title>
+  <meta name="description" content="StereoViT is a streamlined stereo vision transformer: accurate disparity in one forward pass, metric point clouds for grasping, and frozen stereo features for robust robot policies.">
+  <meta name="keywords" content="StereoViT, stereo matching, disparity, vision transformer, robot manipulation, diffusion policy, grasping">
+  <meta name="theme-color" content="#141c38">
+  <meta property="og:title" content="StereoViT: Stereo Vision Transformer for Robust Robot Manipulation">
+  <meta property="og:description" content="Accurate disparity in one forward pass, metric point clouds for grasping, and frozen stereo features for robust robot policies.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kristen-z.github.io/projects/stereovit/">
+  <meta property="og:image" content="https://kristen-z.github.io/projects/stereovit/static/img/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="static/img/logo.svg" type="image/svg+xml">
+  <link rel="icon" href="static/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="static/img/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/style.css?v=202611251821">
+
+  <script type="importmap">
+    { "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+</head>
+
+<body>
+  <!-- ───────────── Navigation ───────────── -->
+  <nav class="nav" id="nav">
+    <a class="nav-brand" href="#top"><img src="static/img/logo.svg" alt="" width="28" height="28"><span>StereoViT</span></a>
+    <div class="nav-links">
+      <a href="#video">Video</a>
+      <a href="#method">Method</a>
+      <a href="#accuracy">Accuracy</a>
+      <a href="#in3d">3D</a>
+      <a href="#compare">Comparison</a>
+      <a href="#robot">Robot</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </nav>
+
+  <!-- ───────────── Hero ───────────── -->
+  <header class="hero" id="top">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-shade"></div>
+    <div class="hero-inner">
+      <div class="hero-badges">
+        <img class="hero-logo" src="static/img/logo.svg" alt="StereoViT robot mascot" width="64" height="64">
+        <span class="pill">Preprint · 2026</span>
+      </div>
+      <h1 class="hero-title" data-text="StereoViT">StereoViT</h1>
+      <p class="hero-sub">Stereo Vision Transformer for<br>Robust Robot Manipulation</p>
+
+      <div class="authors">
+        <span><a href="https://kristen-z.github.io/">Dingxi Zhang</a><sup>1,2</sup></span>
+        <span><a href="https://scholar.google.com/citations?user=BjEdv_AAAAAJ&amp;hl=en">Alexey Gavryushin</a><sup>1</sup></span>
+        <span><a href="https://www.mpi-inf.mpg.de/departments/computer-vision-and-machine-learning/people/bernt-schiele">Bernt Schiele</a><sup>2</sup></span>
+        <span><a href="https://people.inf.ethz.ch/marc.pollefeys/">Marc Pollefeys</a><sup>1,3</sup></span>
+        <span><a href="https://haofeixu.github.io/">Haofei Xu</a><sup>1,4</sup></span>
+      </div>
+      <div class="affils">
+        <span><sup>1</sup>ETH Zurich</span>
+        <span><sup>2</sup>Max Planck Institute for Informatics, Saarland Informatics Campus</span>
+        <span><sup>3</sup>Microsoft</span>
+        <span><sup>4</sup>KE:SAI</span>
+      </div>
+
+      <div class="links">
+        <a class="btn" href="#" data-todo="arXiv abs"><i class="ai ai-arxiv"></i><span>arXiv</span></a>
+        <a class="btn" href="https://github.com/Kristen-Z/StereoViT"><i class="fab fa-github"></i><span>Code</span></a>
+        <!-- TODO(link): Hugging Face Space URL once the demo is up -->
+        <a class="btn" href="#" data-todo="Hugging Face demo"><i class="fas fa-rocket"></i><span>Demo</span></a>
+        <a class="btn" href="https://huggingface.co/Kristen-Z/StereoViT"><span class="hf">🤗</span><span>Models</span></a>
+        <a class="btn ghost" href="#bibtex"><i class="fas fa-quote-right"></i><span>BibTeX</span></a>
+      </div>
+    </div>
+    <div class="hero-caption">
+      <span class="dot"></span><span>Live 3D · StereoViT-L point cloud from one stereo pair<span class="hide-s"> · <span class="kbd">drag</span> to look around</span></span>
+    </div>
+  </header>
+
+  <!-- ───────────── Highlights ───────────── -->
+  <section class="stats" id="highlights">
+    <div class="stat reveal">
+      <div class="stat-num"><span class="hash">#</span><span class="count" data-to="1">1</span></div>
+      <div class="stat-label">on <b>five</b> stereo benchmarks, one checkpoint</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-num"><span class="count" data-to="1.5" data-dec="1">1.5</span>–<span class="count" data-to="4.8" data-dec="1">4.8</span>×</div>
+      <div class="stat-label"><b>faster</b> than high-accuracy stereo models</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-num"><span class="count" data-to="1.7" data-dec="1">1.7</span>×</div>
+      <div class="stat-label">next best policy under <b>domain randomization</b> (RoboTwin 2.0)</div>
+    </div>
+    <div class="stat reveal">
+      <div class="stat-num"><span class="count" data-to="57.5" data-dec="1">57.5</span>%</div>
+      <div class="stat-label">real-robot success in <b>unseen scenes</b> (next best 34.2%)</div>
+    </div>
+  </section>
+
+  <!-- ───────────── Video ───────────── -->
+  <section class="section" id="video">
+    <div class="container narrow">
+      <h2 class="h2 reveal"><span class="eyebrow">Overview</span>Five minutes with StereoViT</h2>
+      <!-- YouTube: put the video id in data-youtube (the local mp4 is then not used and can be deleted) -->
+      <div class="video-frame reveal" data-youtube="">
+        <video controls preload="none" playsinline poster="static/img/video_poster.jpg">
+          <source src="static/video/stereovit_overview.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── Abstract + teaser ───────────── -->
+  <section class="section alt" id="abstract">
+    <div class="container">
+      <figure class="teaser reveal">
+        <img src="static/img/teaser_v4.jpg" alt="StereoViT overview: accuracy vs latency, frozen features for policy learning, point cloud for grasping" loading="lazy">
+        <figcaption><b>Accurate, fast, and transferable to robust robot manipulation.</b></figcaption>
+      </figure>
+      <details class="abstract reveal">
+        <summary><span class="eyebrow">Abstract</span><span class="more">Read the abstract <i class="fas fa-chevron-down"></i></span></summary>
+        <p>Stereo cameras give robots metric geometry from passive, cheap sensors, and stereo input has been shown to improve manipulation policies over monocular RGB. Yet unlike monocular vision, stereo lacks a widely adopted feature backbone for robot learning: leading stereo models rely on cost volumes, feature warping, and iterative refinement, so their geometry emerges over many refinement steps, leaving intermediate features less suited for direct reuse. Inspired by recent evidence that these inductive biases are not strictly necessary for accuracy, we present <b>StereoViT</b>, a streamlined stereo vision transformer that provides both accurate disparity and transferable stereo features for robotic manipulation. StereoViT first uses a depth-pretrained ViT to encode each view, and then a transformer decoder to relate the stereo pair with attentions, predicting disparity in a single feed-forward pass. With one checkpoint, StereoViT ranks first on KITTI 2012 and 2015 (all metrics), ETH3D (BP-0.5), Middlebury (BP-4), and Spring (all metrics) and is 1.5–4.8× faster than competing methods. Its depth yields the highest grasp success among stereo methods, while its frozen stereo features match the strongest diffusion policy baselines in clean scenes and achieve much higher success rates under domain randomization on the RoboTwin 2.0 benchmark. Real-world experiments further confirm these gains.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ───────────── Method ───────────── -->
+  <section class="section" id="method">
+    <div class="container">
+      <h2 class="h2 reveal"><span class="eyebrow">Method</span>No cost volume. No iterations. One forward pass.</h2>
+      <p class="lede reveal">A transformer relates the two views directly. The same features give disparity and drive robot policies.</p>
+      <figure class="pipeline reveal">
+        <button class="zoomable" data-full="static/img/pipeline.jpg" aria-label="Enlarge pipeline figure">
+          <img src="static/img/pipeline.jpg" alt="StereoViT architecture" loading="lazy">
+          <span class="zoom-hint"><i class="fas fa-expand"></i></span>
+        </button>
+      </figure>
+      <div class="cards4">
+        <div class="card reveal">
+          <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="7" height="14" rx="2"/><rect x="14" y="5" width="7" height="14" rx="2"/><path d="M10 12h4"/></svg></div>
+          <h3>Depth-pretrained encoder</h3>
+          <p>A shared ViT from Depth Anything V2 encodes each view.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><path d="M13 17h8M13 14h8M13 20h8"/></svg></div>
+          <h3>Cross-view decoder</h3>
+          <p>Windowed and global attention relate the two views.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M3 19c3-9 5-13 9-13s6 4 9 13"/><path d="M12 6v13" stroke-dasharray="2 2"/></svg></div>
+          <h3>Expectation head</h3>
+          <p>Disparity as an expectation over fixed anchors.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11"/><path d="M9 3l3 2 3-2M9 21l3-2 3 2"/></svg></div>
+          <h3>Frozen features for policies</h3>
+          <p>Frozen decoder features condition a diffusion policy.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── Accuracy vs latency ───────────── -->
+  <section class="section alt" id="accuracy">
+    <div class="container">
+      <div class="split">
+        <div class="split-text reveal">
+          <h2 class="h2"><span class="eyebrow">Accuracy</span>Top of the leaderboards, at a fraction of the latency</h2>
+          <p>Ranked first on five benchmarks with a single checkpoint.</p>
+          <div class="ranks">
+            <span class="rank"><b>#1</b> KITTI 2012</span>
+            <span class="rank"><b>#1</b> KITTI 2015</span>
+            <span class="rank"><b>#1</b> ETH3D <small>BP-0.5</small></span>
+            <span class="rank"><b>#1</b> Middlebury <small>BP-4</small></span>
+            <span class="rank"><b>#1</b> Spring</span>
+          </div>
+          <p class="note">Official test leaderboards. Latency at 544×960, one GH200 (FP32). Hover for numbers.</p>
+        </div>
+        <div class="plot-card reveal">
+          <div class="seg" role="tablist" id="plot-tabs">
+            <button class="on" data-panel="0" role="tab">ETH3D</button>
+            <button data-panel="1" role="tab">Middlebury</button>
+            <button data-panel="2" role="tab">KITTI 2012</button>
+            <button data-panel="3" role="tab">KITTI 2015</button>
+            <button data-panel="4" role="tab">Spring</button>
+          </div>
+          <svg id="plot" viewBox="0 0 560 380" role="img" aria-label="Disparity error versus latency"></svg>
+          <div class="plot-tip" id="plot-tip"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── 3D viewer ───────────── -->
+  <section class="section" id="in3d">
+    <div class="container wide">
+      <h2 class="h2 reveal"><span class="eyebrow">Interactive</span>Metric 3D from a single stereo pair</h2>
+      <p class="lede reveal">One stereo pair, one forward pass. No fusion over time.</p>
+      <div class="viewer-grid reveal">
+        <div class="viewer" id="viewer">
+          <canvas id="pc-canvas"></canvas>
+          <div class="viewer-top">
+            <span class="viewer-name" id="pc-name">Tabletop</span>
+            <span class="viewer-count" id="pc-count"></span>
+          </div>
+          <div class="viewer-tools">
+            <button id="pc-orbit" class="tool on" title="Auto orbit"><i class="fas fa-rotate"></i></button>
+            <button id="pc-reset" class="tool" title="Back to the camera view"><i class="fas fa-camera"></i></button>
+          </div>
+          <div class="viewer-hint"><span class="kbd">drag</span> orbit · <span class="kbd">scroll</span> zoom · <span class="kbd">right-drag</span> pan</div>
+          <div class="viewer-load" id="pc-load"><span></span></div>
+        </div>
+        <div class="viewer-side">
+          <div class="cmp" id="pc-pair" data-label-a="Left image" data-label-b="StereoViT disparity">
+            <img class="cmp-a" alt="Left input image">
+            <img class="cmp-b" alt="StereoViT disparity">
+            <div class="cmp-handle"><span></span></div>
+            <span class="cmp-tag a">Left image</span><span class="cmp-tag b">Disparity</span>
+          </div>
+          <div class="scene-chips" id="pc-chips"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── Comparison ───────────── -->
+  <section class="section alt" id="compare">
+    <div class="container">
+      <h2 class="h2 reveal"><span class="eyebrow">Comparison</span>Solid on glass, shiny metal and fine detail</h2>
+      <p class="lede reveal">Drag the handle to compare with state-of-the-art stereo models.</p>
+      <div class="tabs reveal" id="cmp-tabs"></div>
+      <div class="cmp-bar reveal"><span class="cmp-bar-label">Compare with</span><div class="seg" id="cmp-methods"></div></div>
+      <div class="cmp-stage reveal">
+        <div class="cmp big" id="cmp-main">
+          <img class="cmp-a" alt="Baseline disparity">
+          <img class="cmp-b" alt="StereoViT disparity">
+          <div class="cmp-handle"><span></span></div>
+          <span class="cmp-tag a" id="cmp-tag-a">FoundationStereo</span><span class="cmp-tag b ours">StereoViT</span>
+        </div>
+        <div class="cmp-side">
+          <p class="cmp-text" id="cmp-text"></p>
+          <div class="thumbs">
+            <figure><img id="cmp-input" alt="Input image"><figcaption>Input</figcaption></figure>
+            <figure id="cmp-gt-fig"><img id="cmp-gt" alt="Ground truth disparity"><figcaption>Ground truth</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── Robot ───────────── -->
+  <section class="section dark" id="robot">
+    <div class="container wide">
+      <h2 class="h2 reveal"><span class="eyebrow">Real robot</span>Trained in one scene. Deployed in unseen ones.</h2>
+      <p class="lede reveal">Frozen StereoViT features, a policy trained in one scene, tested in new ones. Videos at 2×.</p>
+      <div class="tabs dark reveal" id="task-tabs"></div>
+      <div class="task reveal" id="task">
+        <div class="task-head">
+          <div>
+            <h3 id="task-title">Pour Glass</h3>
+            <p id="task-desc"></p>
+          </div>
+          <button class="replay" id="task-replay"><i class="fas fa-rotate-right"></i> Replay</button>
+        </div>
+        <div class="task-grid">
+          <figure class="train">
+            <img id="task-train" alt="Training scene">
+            <figcaption><span class="tag">Training scene</span></figcaption>
+          </figure>
+          <div class="arrow-col"><i class="fas fa-arrow-right"></i></div>
+          <figure class="ours">
+            <div class="vid"><video id="v-ours" muted playsinline preload="none"></video><span class="speed">2×</span><span class="unseen" id="task-unseen">Unseen scene</span><span class="badge" id="b-ours"></span></div>
+            <figcaption><span class="mname ours">StereoViT (ours)</span><div class="bar ours"><i id="bar-ours"></i></div><span class="pct" id="p-ours"></span></figcaption>
+          </figure>
+        </div>
+        <div class="base-grid" id="base-grid"></div>
+        <p class="task-note">Success over 20 rollouts per policy.</p>
+      </div>
+
+      <div class="mean reveal" id="mean">
+        <h3>Mean success over six tasks</h3>
+        <div id="mean-bars"></div>
+      </div>
+
+      <div class="reel-head reveal"><h3>More StereoViT rollouts in unseen scenes</h3></div>
+    </div>
+    <div class="reel" id="reel"><div class="reel-row" data-dir="1"></div><div class="reel-row" data-dir="-1"></div></div>
+  </section>
+
+  <!-- ───────────── More in the paper ───────────── -->
+  <section class="section" id="more">
+    <div class="container">
+      <h2 class="h2 reveal"><span class="eyebrow">Also in the paper</span>Grasping and simulation</h2>
+      <div class="cards2">
+        <figure class="card wide reveal">
+          <img src="static/img/dreds_qualitative_1scene.jpg" alt="Grasping on DREDS" loading="lazy">
+          <figcaption><h3>Depth for grasping</h3><p>Highest grasp success among stereo methods on DREDS, especially on transparent objects.</p></figcaption>
+        </figure>
+        <figure class="card wide reveal">
+          <img src="static/img/fig_robotwin_tasks.jpg" alt="RoboTwin 2.0 tasks" loading="lazy">
+          <figcaption><h3>Simulation: RoboTwin 2.0</h3><p>On par in clean scenes, 1.7× the next best under domain randomization.</p></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── BibTeX ───────────── -->
+  <section class="section alt" id="bibtex">
+    <div class="container narrow">
+      <h2 class="h2 reveal"><span class="eyebrow">Citation</span>BibTeX</h2>
+      <div class="bib reveal">
+        <button class="copy" id="bib-copy"><i class="far fa-copy"></i> Copy</button>
+<pre id="bib-text">@article{zhang2026stereovit,
+  title   = {StereoViT: Stereo Vision Transformer for Robust Robot Manipulation},
+  author  = {Zhang, Dingxi and Gavryushin, Alexey and Schiele, Bernt and Pollefeys, Marc and Xu, Haofei},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  year    = {2026}
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <img src="static/img/logo.svg" alt="" width="36" height="36">
+    <p>StereoViT · 2026 · page by <a href="https://kristen-z.github.io/">Dingxi Zhang</a></p>
+    <p class="muted">Scenes from ETH3D, Middlebury, KITTI, Booster, XYZ-IBD, SouthKensington SV and DROID.</p>
+  </footer>
+
+  <div class="lightbox" id="lightbox"><img alt=""></div>
+
+  <script src="static/js/main.js?v=202611251821" defer></script>
+  <script type="module" src="static/js/pc.js?v=202611251821"></script>
+</body>
+</html>
