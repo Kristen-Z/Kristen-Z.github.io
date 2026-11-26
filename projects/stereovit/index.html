@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
-  <link rel="stylesheet" href="static/css/style.css?v=202611261546">
+  <link rel="stylesheet" href="static/css/style.css?v=202611261826">
 
   <script type="importmap">
     { "imports": {
@@ -76,7 +76,7 @@
       <div class="links">
         <a class="btn" href="#" data-todo="arXiv abs"><i class="ai ai-arxiv"></i><span>arXiv</span></a>
         <a class="btn" href="https://github.com/Kristen-Z/StereoViT"><i class="fab fa-github"></i><span>Code</span></a>
-        <a class="btn" href="https://github.com/Kristen-Z/StereoViT"><i class="fas fa-rocket"></i><span>Demo</span></a>
+        <a class="btn" href="https://huggingface.co/spaces/Kristen-Z/StereoViT"><i class="fas fa-rocket"></i><span>Demo</span></a>
         <a class="btn" href="https://huggingface.co/Kristen-Z/StereoViT"><span class="hf">🤗</span><span>Models</span></a>
         <a class="btn ghost" href="#bibtex"><i class="fas fa-quote-right"></i><span>BibTeX</span></a>
       </div>
@@ -130,7 +130,7 @@
         <div class="teaser-map"><div class="teaser-inner" id="teaser-inner">
           <img src="static/img/teaser_v4.jpg" alt="StereoViT overview: accuracy vs latency, frozen features for policy learning, point cloud for grasping" loading="lazy">
         </div></div>
-        <figcaption><b>Accurate, fast, and transferable to robust robot manipulation.</b> <span class="teaser-hint">Click a panel to explore it.</span></figcaption>
+        <figcaption><b>Accurate, fast, and transferable to robust robot manipulation.</b> <span class="teaser-hint">Hover a panel to try it; click to open its section.</span></figcaption>
       </figure>
       <details class="abstract reveal">
         <summary><span class="eyebrow">Abstract</span><span class="more">Read the abstract <i class="fas fa-chevron-down"></i></span></summary>
@@ -241,8 +241,8 @@
   <!-- ───────────── Comparison ───────────── -->
   <section class="section alt" id="compare">
     <div class="container">
-      <h2 class="h2 reveal"><span class="eyebrow">Comparison</span>Hard cases: glass, metal and fine detail</h2>
-      <p class="lede reveal">Drag the handle to compare with state-of-the-art stereo models, or with the ground truth.</p>
+      <h2 class="h2 reveal"><span class="eyebrow">Disparity comparison</span>Hard cases: glass, metal and fine detail</h2>
+      <p class="lede reveal">Drag the handle to compare StereoViT's disparity with state-of-the-art stereo models, or with the ground truth.</p>
       <div class="tabs reveal" id="cmp-tabs"></div>
       <div class="cmp-bar reveal"><span class="cmp-bar-label">Compare with</span><div class="seg" id="cmp-methods"></div></div>
       <div class="cmp-stage reveal">
@@ -256,8 +256,8 @@
           <p class="cmp-text" id="cmp-text"></p>
           <div class="thumbs">
             <figure><img id="cmp-input" alt="Input image"><figcaption>Input</figcaption></figure>
-            <figure id="cmp-gt-fig"><img id="cmp-gt" alt="Ground truth disparity"><figcaption>Ground truth</figcaption></figure>
           </div>
+          <p class="cmp-note">Disparity, near = red, far = blue; one colour scale per scene, set by the ground truth. White = no ground truth.</p>
         </div>
       </div>
     </div>
@@ -299,7 +299,7 @@
 
       <div class="rdepth reveal" id="rdepth">
         <h3>Depth in the robot's workspace</h3>
-        <p class="rdepth-lede">Top camera of the robot, in the training scenes. Drag the handle to compare StereoViT with the ZED camera's own depth and with stereo baselines.</p>
+        <p class="rdepth-lede">Top camera of the robot, in the training scenes. Drag the handle to compare StereoViT's depth with the ZED camera's own depth and with stereo baselines.</p>
         <div class="tabs dark" id="rd-tabs"></div>
         <div class="cmp-bar"><span class="cmp-bar-label">Compare with</span><div class="seg dark" id="rd-methods"></div></div>
         <div class="cmp-stage">
@@ -314,7 +314,7 @@
             <div class="thumbs">
               <figure><img id="rd-input" alt="Left camera image"><figcaption>Left image</figcaption></figure>
             </div>
-            <p class="rd-note">Inverse depth, near = red, far = blue; one colour scale per scene. Black = no sensor depth.</p>
+            <p class="rd-note">Depth, shown as inverse depth (near = red, far = blue) with one colour scale per scene. The stereo models' disparity is converted to depth with the stereo baseline fitted to the sensor depth. Black = no sensor depth.</p>
           </div>
         </div>
       </div>
@@ -363,7 +363,7 @@
 
   <div class="lightbox" id="lightbox"><img alt=""></div>
 
-  <script src="static/js/main.js?v=202611261546" defer></script>
-  <script type="module" src="static/js/pc.js?v=202611261546"></script>
+  <script src="static/js/main.js?v=202611261826" defer></script>
+  <script type="module" src="static/js/pc.js?v=202611261826"></script>
 </body>
 </html>

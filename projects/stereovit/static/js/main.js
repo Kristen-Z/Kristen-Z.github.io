@@ -218,45 +218,336 @@
   drawPanel(0);
   svg.closest('.reveal').addEventListener('reveal', () => { shown = true; setTimeout(() => drawPanel(panel), 120); }, { once: true });
 
-  /* ───── teaser: each panel links to its live version on the page; the plot points show their numbers ───── */
+  /* ───── teaser: hovering a panel lifts it out of the figure and brings it to life (desktop); a click or tap opens its section.
+     stereo pair = disparity probe (a point and its match on the same row) · disparity = lens onto the left image · StereoViT box =
+     what is inside · policy frames = the recording they are cut from · point cloud = turntable rendered with the teaser's own
+     renderer · grasps = a Franka hand visiting the figure's grasps (animation) ───── */
   (() => {
     const box = $('#teaser-inner');
     if (!box) return;
-    const IW = 2750, IH = 917, pct = (v, d) => `${(100 * v / d).toFixed(3)}%`;
-    const place = (el, x0, y0, x1, y1) => Object.assign(el.style, { left: pct(x0, IW), top: pct(y0, IH), width: pct(x1 - x0, IW), height: pct(y1 - y0, IH) });
-    [[40, 10, 700, 850, '#accuracy', 'Interactive plot'], [752, 30, 1496, 404, '#method', 'Architecture'],
-      [1550, 94, 1900, 336, '#compare', 'Depth comparisons'], [752, 430, 1920, 850, '#robot', 'Robot rollouts'],
-      [1960, 30, 2744, 400, '#in3d', 'Explore in 3D'], [1960, 500, 2744, 850, '#more', 'Grasping']].forEach(([x0, y0, x1, y1, href, label]) => {
-      const a = document.createElement('a');
-      a.className = x0 > IW * 0.6 ? 'tz r' : 'tz'; a.href = href; a.setAttribute('aria-label', label);  // right column: label on the right
-      a.innerHTML = `<span>${label} <i class="fas fa-arrow-down"></i></span>`;
-      place(a, x0, y0, x1, y1);
-      box.appendChild(a);
-    });
-    const tip = document.createElement('div');
-    tip.className = 'plot-tip teaser-tip';
-    box.appendChild(tip);
-    const PTS = [  // marker centres in the figure (px) and the PANELS entry they show
-      [0, 'StereoViT-L', 487, 80], [0, 'StereoViT-M', 628, 97], [0, 'NBS', 294, 104], [0, 'WAFT-Stereo-L', 420, 172],
-      [0, 'S2M2-XL', 408, 187], [0, 'FoundationStereo', 234, 322], [1, 'StereoViT-L', 488, 480], [1, 'S2M2-XL', 409, 500],
-      [1, 'NBS', 295, 519], [1, 'WAFT-Stereo-L', 420, 598], [1, 'FoundationStereo', 234, 706]];
-    PTS.forEach(([p, name, x, y]) => {
-      const P = PANELS[p], v = P.pts[name], ours = name.startsWith('StereoViT'), r = ours ? 22 : 17;
-      const a = document.createElement('a');
-      a.className = 'tp'; a.href = '#accuracy'; a.setAttribute('aria-label', name);
-      place(a, x - r, y - r, x + r, y + r);
-      box.appendChild(a);
-      a.addEventListener('pointerenter', () => {
-        tip.innerHTML = `${ours ? `<b>${name}</b>` : name} · ${v[0]} ms · ${P.y.replace(' (%)', '')} ${v[1].toFixed(2)}%`;
-        tip.style.left = pct(x, IW); tip.style.top = pct(y - r, IH); tip.style.opacity = 1;
+    const IW = 2750, IH = 917, T = 'static/teaser/', NS = 'http://www.w3.org/2000/svg';
+    const pct = (v, d) => `${(100 * v / d).toFixed(3)}%`;
+    const place = (e, [x, y, w, h], [cx, cy, cw, ch] = [0, 0, IW, IH]) =>
+      Object.assign(e.style, { left: pct(x - cx, cw), top: pct(y - cy, ch), width: pct(w, cw), height: pct(h, ch) });
+    const mk = (tag, cls, parent, html) => {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (html != null) e.innerHTML = html;
+      if (parent) parent.appendChild(e);
+      return e;
+    };
+    const sv = (tag, attrs, parent) => {
+      const e = document.createElementNS(NS, tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(e);
+      return e;
+    };
+    const U = (a, b) => { const x = Math.min(a[0], b[0]), y = Math.min(a[1], b[1]); return [x, y, Math.max(a[0] + a[2], b[0] + b[2]) - x, Math.max(a[1] + a[3], b[1] + b[3]) - y]; };
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const hint = $('.teaser-hint');
+    if (hint) hint.textContent = fine ? 'Hover a panel to try it; click to open its section.' : 'Tap a panel to open its section.';
+    const base = $('img', box);
+    const teaserURL = () => base.currentSrc || base.src;
+    const still = (parent, r, card) => {  // the panel's own pixels of the figure, shown until the live content is ready
+      const s = mk('div', 'tz-still', parent);
+      place(s, r, card);
+      s.style.backgroundImage = `url("${teaserURL()}")`;
+      s.style.backgroundSize = `${100 * IW / r[2]}% ${100 * IH / r[3]}%`;
+      s.style.backgroundPosition = `${100 * r[0] / (IW - r[2])}% ${100 * r[1] / (IH - r[3])}%`;
+      return s;
+    };
+
+    fetch(T + 'live.json' + V).then(r => r.json()).then(G => {
+      const dim = fine ? mk('div', 'tz-dim', box) : null, hole = dim && mk('i', 'tz-hole', dim);
+      let active = null, scrollT = 0, warmed = false, probe = null;
+      addEventListener('scroll', () => { scrollT = performance.now(); }, { passive: true });
+      const P = G.probe;
+      const disp = (u, v) => {  // left-image px (1920 x 1080) -> StereoViT-L disparity (px)
+        if (!probe) return null;
+        const i = Math.min(P.w - 1, Math.max(0, Math.floor(u / P.W * P.w))), j = Math.min(P.h - 1, Math.max(0, Math.floor(v / P.H * P.h)));
+        return probe[j * P.w + i] / P.q + P.off;
+      };
+      const seqs = {};
+      const clip = (v, src) => { if (!v.src) { v.preload = 'auto'; v.src = `${T}${src}${V}`; } };  // preload="none" would never fetch it
+      function warm() {  // load the live content (about 1.5 MB) on the first hover, or when the figure has been on screen for a while
+        if (warmed) return;
+        warmed = true;
+        $$('img[data-src]', box).forEach(im => { im.addEventListener('load', () => im.classList.add('ok'), { once: true }); im.src = im.dataset.src; });
+        $$('[data-bg]', box).forEach(e => { e.style.backgroundImage = `url("${e.dataset.bg}")`; });
+        fetch(T + 'probe.bin' + V).then(r => r.arrayBuffer()).then(b => { probe = new Uint8Array(b); if (active && active.refresh) active.refresh(); });
+        Object.values(seqs).forEach(s => s.load());
+        box.querySelectorAll('.tz-slot video').forEach(v => clip(v, G.frames.video));
+        box.querySelectorAll('.tz-vid').forEach(v => clip(v, G.grasp.video));
+      }
+      function open(z) {
+        if (active === z) return;
+        if (active) close(active);
+        active = z;
+        z.a.classList.add('on');
+        warm();
+        if (dim) {
+          box.classList.add('dim');
+          if (z.hole) place(hole, z.hole); else Object.assign(hole.style, { width: '0px', height: '0px' });
+        }
+        if (z.open) z.open();
+      }
+      function close(z) {
+        z.a.classList.remove('on');
+        if (active === z) { active = null; box.classList.remove('dim'); }
+        if (z.close) z.close();
+      }
+      // one zone per panel: a link over the panel and, on desktop, a card that lifts out of the figure (scale s about origin o,
+      // shifted so that it stays inside the figure; s0: start scale of a card that grows out of a smaller panel)
+      function zone(href, label, rect, card, s, o, s0 = 1) {
+        const a = mk('a', 'tz', box);
+        a.href = href;
+        a.setAttribute('aria-label', label);
+        place(a, rect);
+        const z = { a, rect, card, s };
+        if (fine) {
+          const go = () => { if (performance.now() - scrollT > 250) open(z); };
+          a.addEventListener('pointerenter', go);
+          a.addEventListener('pointermove', go);
+          a.addEventListener('pointerleave', () => close(z));
+          a.addEventListener('focus', () => open(z));
+          a.addEventListener('blur', () => close(z));
+        }
+        if (!card || !fine) return z;
+        const c = z.c = mk('div', 'tz-card', a);
+        place(c, card, rect);
+        const [x, y, w, h] = card, X = x + o[0] * w * (1 - s), Y = y + o[1] * h * (1 - s);
+        const dx = Math.max(-16 - X, 0) + Math.min(IW + 16 - (X + w * s), 0), dy = Math.max(-60 - Y, 0) + Math.min(IH + 60 - (Y + h * s), 0);
+        Object.assign(c.style, { transformOrigin: `${100 * o[0]}% ${100 * o[1]}%` });
+        c.style.setProperty('--s', s);
+        c.style.setProperty('--s0', s0);
+        c.style.setProperty('--tx', pct(dx, w));
+        c.style.setProperty('--ty', pct(dy, h));
+        return z;
+      }
+      const chip = (c, html, top) => mk('span', 'tz-chip' + (top ? ' top' : ''), c, html);
+
+      /* (a) plots: the points show their numbers */
+      const plot = zone('#accuracy', 'Accuracy vs. latency: open the interactive plot', [40, 10, 660, 840]);
+      plot.hole = [40, 10, 660, 840];
+      if (fine) {
+        const tip = mk('div', 'teaser-tip', box);
+        const PTS = [  // marker centres in the figure (px) and the PANELS entry they show
+          [0, 'StereoViT-L', 487, 80], [0, 'StereoViT-M', 628, 97], [0, 'NBS', 294, 104], [0, 'WAFT-Stereo-L', 420, 172],
+          [0, 'S2M2-XL', 408, 187], [0, 'FoundationStereo', 234, 322], [1, 'StereoViT-L', 488, 480], [1, 'S2M2-XL', 409, 500],
+          [1, 'NBS', 295, 519], [1, 'WAFT-Stereo-L', 420, 598], [1, 'FoundationStereo', 234, 706]];
+        PTS.forEach(([p, name, x, y]) => {
+          const pan = PANELS[p], v = pan.pts[name], ours = name.startsWith('StereoViT'), r = ours ? 24 : 19;
+          const s = mk('span', 'tp' + (ours ? ' ours' : ''), plot.a);
+          place(s, [x - r, y - r, 2 * r, 2 * r], plot.rect);
+          s.addEventListener('pointerenter', () => {
+            tip.innerHTML = `<div class="tt-h${ours ? ' ours' : ''}">${name}</div>`
+              + `<div class="tt-m">${pan.y.replace(' (%)', '')} <b>${v[1].toFixed(2)}%</b></div>`
+              + `<div class="tt-m">Latency <b>${v[0]} ms</b></div>`;
+            tip.style.left = pct(x + r + 16, IW);
+            const hh = tip.offsetHeight / box.offsetHeight * IH || 300;
+            tip.style.top = pct(Math.max(4, Math.min(IH - hh - 4, y - hh / 2)), IH);
+            tip.classList.add('on');
+          });
+          s.addEventListener('pointerleave', () => tip.classList.remove('on'));
+        });
+      }
+
+      /* (b) stereo pair: a point in L, its match in R on the same image row, shifted left by the disparity */
+      const pair = zone('#method', 'Stereo pair: see the architecture', U(G.pair.L, G.pair.R), G.pair.card, 1.75, [0, 0]);
+      if (pair.c) {
+        const c = pair.c, C = G.pair.card, rel = r => [r[0] - C[0], r[1] - C[1], r[2], r[3]];
+        const L = rel(G.pair.L), R = rel(G.pair.R);
+        still(c, U(G.pair.L, G.pair.R), C);
+        [['pair_L', G.pair.L, 'L'], ['pair_R', G.pair.R, 'R']].forEach(([n, r, t]) => {
+          const im = mk('img', 'tz-img', c);
+          im.dataset.src = `${T}${n}.jpg${V}`;
+          im.alt = '';
+          place(im, r, C);
+          const tag = mk('b', 'tz-lr', c, t);
+          place(tag, [r[0] + 6, r[1] + 6, 26, 26], C);
+        });
+        const g = sv('svg', { viewBox: `0 0 ${C[2]} ${C[3]}`, preserveAspectRatio: 'none', class: 'tz-svg' }, c);
+        const epL = sv('line', { class: 'epi' }, g), epR = sv('line', { class: 'epi' }, g), sh = sv('line', { class: 'sh' }, g);
+        const gh = sv('circle', { class: 'ghost', r: 7 }, g), dL = sv('circle', { class: 'dot', r: 8 }, g), dR = sv('circle', { class: 'dot', r: 8 }, g);
+        const tL = sv('text', {}, g), tR = sv('text', { 'text-anchor': 'middle' }, g);
+        chip(c, 'Point at either image').classList.add('tr');
+        let last = [900, 560];
+        const set = (u, v) => {  // u, v: left-image px
+          last = [u, v];
+          const d = disp(u, v);
+          g.style.opacity = d == null ? 0 : 1;
+          if (d == null) return;
+          const yL = L[1] + v / P.H * L[3], yR = R[1] + v / P.H * R[3];
+          const xL = L[0] + u / P.W * L[2], xR = R[0] + (u - d) / P.W * R[2], xG = R[0] + u / P.W * R[2];
+          const at = (e, o) => { for (const k in o) e.setAttribute(k, o[k]); };
+          at(epL, { x1: L[0], x2: L[0] + L[2], y1: yL, y2: yL });
+          at(epR, { x1: R[0], x2: R[0] + R[2], y1: yR, y2: yR });
+          at(sh, { x1: xG, x2: xR, y1: yR, y2: yR });
+          at(gh, { cx: xG, cy: yR });
+          at(dL, { cx: xL, cy: yL });
+          at(dR, { cx: xR, cy: yR });
+          const right = xL < L[0] + L[2] * 0.62, below = yL < L[1] + 34;  // labels stay inside the card
+          at(tL, { x: xL + (right ? 14 : -14), y: below ? yL + 26 : yL - 12, 'text-anchor': right ? 'start' : 'end' });
+          tL.textContent = `depth ${(P.fB / d).toFixed(2)} m`;
+          at(tR, { x: Math.max(R[0] + 80, Math.min(R[0] + R[2] - 80, (xG + xR) / 2)), y: yR < R[1] + 34 ? yR + 28 : yR - 14 });
+          tR.textContent = `disparity ${Math.round(d)} px`;
+        };
+        pair.open = () => set(900, 560);  // start on the glass bottle
+        pair.refresh = () => set(...last);
+        c.addEventListener('pointermove', e => {
+          const b = c.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * C[2], y = (e.clientY - b.top) / b.height * C[3];
+          const inR = (r) => x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3];
+          if (inR(L)) set((x - L[0]) / L[2] * P.W, (y - L[1]) / L[3] * P.H);
+          else if (inR(R)) {  // a point in R: find the left pixel whose match it is (fixed point along the row)
+            const uR = (x - R[0]) / R[2] * P.W, v = (y - R[1]) / R[3] * P.H;
+            let u = uR + 140;
+            for (let k = 0; k < 6; k++) u = uR + (disp(Math.min(P.W - 1, u), v) || 140);
+            set(Math.min(P.W - 1, u), v);
+          }
+        });
+      }
+
+      /* (b) StereoViT box: open it to see what is inside (encoder + decoder of the architecture figure) */
+      const bx = G.box, peek = zone('#method', 'StereoViT: see the architecture', bx.rect, bx.card, 1,
+        [(bx.rect[0] + bx.rect[2] / 2 - bx.card[0]) / bx.card[2], (bx.rect[1] + bx.rect[3] / 2 - bx.card[1]) / bx.card[3]], bx.rect[2] / bx.card[2]);
+      if (peek.c) {
+        peek.c.classList.add('peek');
+        const im = mk('img', 'tz-img tz-fill', peek.c);
+        im.dataset.src = `${T}arch.jpg${V}`;
+        im.alt = 'Inside StereoViT: shared ViT encoder, decoder with window, shifted-window and global attention, stereo features';
+        chip(peek.c, 'Inside StereoViT', true);
+        chip(peek.c, 'Click for the architecture <i class="fas fa-arrow-down"></i>');
+      }
+
+      /* (b) disparity: a lens onto the left image, with the disparity and depth under it */
+      const dz = zone('#compare', 'Disparity: see the comparisons', G.disp.rect, G.disp.rect, 1.75, [0.6, 0.3]);
+      if (dz.c) {
+        const c = dz.c;
+        still(c, G.disp.rect, G.disp.rect);
+        const im = mk('img', 'tz-img tz-fill', c);
+        im.dataset.src = `${T}disp.jpg${V}`;
+        im.alt = '';
+        const lens = mk('div', 'tz-lens', c), read = mk('div', 'tz-read', c);
+        lens.dataset.bg = `${T}pair_L.jpg${V}`;
+        chip(c, 'Disparity · lens: left image', true);
+        let last = [900 / 1920, 560 / 1080];
+        const set = (fx, fy) => {
+          last = [fx, fy];
+          const W = c.offsetWidth, H = c.offsetHeight, r = 0.27 * H;
+          Object.assign(lens.style, { width: `${2 * r}px`, height: `${2 * r}px`, left: `${fx * W - r}px`, top: `${fy * H - r}px`,
+            backgroundSize: `${W}px ${H}px`, backgroundPosition: `${r - fx * W}px ${r - fy * H}px` });
+          const d = disp(fx * P.W, fy * P.H);
+          read.textContent = d == null ? '' : `${Math.round(d)} px · ${(P.fB / d).toFixed(2)} m`;
+          read.style.opacity = d == null ? 0 : 1;
+          Object.assign(read.style, { left: `${fx * W}px`, top: `${Math.min(H - 14, fy * H + r + 3)}px` });
+        };
+        dz.open = () => set(...last);
+        dz.refresh = () => set(...last);
+        c.addEventListener('pointermove', e => {
+          const b = c.getBoundingClientRect();
+          set(Math.max(0, Math.min(1, (e.clientX - b.left) / b.width)), Math.max(0, Math.min(1, (e.clientY - b.top) / b.height)));
+        });
+      }
+
+      /* (b) policy frames: the recording they are cut from (same crop, 2x); each frame loops its phase of the rollout, from its still on */
+      const fr = G.frames, fz = zone('#robot', 'Robot policy: see the rollouts', U(fr.rects[0], fr.rects[2]), fr.card, 1.28, [0.5, 1]);
+      if (fz.c) {
+        const vids = fr.rects.map((r, i) => {
+          const slot = still(fz.c, r, fr.card);
+          slot.classList.add('tz-slot');
+          const v = mk('video', '', slot);
+          v.muted = true; v.playsInline = true; v.preload = 'none';
+          v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+          v.addEventListener('playing', () => v.classList.add('ok'));
+          [v._a, v._b] = fr.segs[i];
+          v._t = fr.at[i];
+          return v;
+        });
+        chip(fz.c, 'StereoViT policy · 2×', true);
+        let raf = 0;
+        fz.open = () => {
+          vids.forEach(v => {
+            clip(v, fr.video);
+            const go = () => { v.currentTime = v._t; v.play().catch(() => {}); };
+            if (v.readyState >= 1) go(); else v.addEventListener('loadedmetadata', go, { once: true });
+          });
+          const tick = () => {
+            vids.forEach(v => { if (v.readyState >= 1 && !v.seeking && (v.currentTime >= v._b || v.currentTime < v._a - 0.3)) v.currentTime = v._a; });
+            raf = requestAnimationFrame(tick);
+          };
+          raf = requestAnimationFrame(tick);
+        };
+        fz.close = () => { cancelAnimationFrame(raf); vids.forEach(v => { v.pause(); v.classList.remove('ok'); }); };
+      }
+
+      /* (c) grasps: a Franka hand visiting the figure's grasps (an animation: same renderer, camera and grasps as the figure) */
+      const gz = zone('#more', 'Grasps: see grasping', G.grasp.rect, G.grasp.card, 1.32, [1, 1]);
+      if (gz.c) {
+        const st = still(gz.c, G.grasp.rect, G.grasp.card), v = mk('video', 'tz-fill tz-vid', gz.c);
+        v.muted = true; v.playsInline = true; v.loop = true; v.preload = 'none';
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        v.addEventListener('playing', () => { v.classList.add('ok'); st.style.opacity = 0; });
+        chip(gz.c, 'Franka hand on the predicted grasps (animation)');
+        gz.open = () => {
+          clip(v, G.grasp.video);
+          const go = () => { v.currentTime = 0; v.play().catch(() => {}); };
+          if (v.readyState >= 1) go(); else v.addEventListener('loadedmetadata', go, { once: true });
+        };
+        gz.close = () => { v.pause(); v.classList.remove('ok'); st.style.opacity = 1; };
+      }
+
+      /* (c) point cloud: move the mouse to turn it (frames from the teaser's renderer, -26..26 deg) */
+      [['cloud', '#in3d', 'Point cloud: open the 3D viewer', [1, 0], 'Move to turn the cloud · click for the 3D viewer']].forEach(([k, href, label, o, tipText]) => {
+        const g = G[k], z = zone(href, label, g.rect, g.card, 1.32, o);
+        const frames = [];
+        let draw = () => {};
+        seqs[k] = { load() {
+          for (let i = 0; i < g.n; i++) {
+            const im = new Image();
+            im.decoding = 'async';
+            if (i === g.zero) im.onload = () => { if (active === z) draw(); };
+            im.src = `${T}${k}_${String(i).padStart(2, '0')}.webp${V}`;
+            frames[i] = im;
+          }
+        } };
+        if (!z.c) return;
+        const c = z.c, st = still(c, g.rect, g.card), cv = mk('canvas', 'tz-fill', c), ctx = cv.getContext('2d');
+        chip(c, tipText);
+        let cur = g.zero, tgt = g.zero, raf = 0, x0 = null, a0 = 0, hintT = [];
+        draw = () => {
+          const im = frames[Math.round(cur)];
+          if (!im || !im.complete || !im.naturalWidth) return;
+          const W = Math.round(c.offsetWidth * z.s * devicePixelRatio), H = Math.round(c.offsetHeight * z.s * devicePixelRatio);
+          if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+          ctx.drawImage(im, 0, 0, W, H);
+          st.style.opacity = 0;
+        };
+        const loop = () => {
+          cur += (tgt - cur) * 0.2;
+          if (Math.abs(tgt - cur) < 0.03) cur = tgt;
+          draw();
+          raf = cur === tgt ? 0 : requestAnimationFrame(loop);
+        };
+        const turn = t => { tgt = Math.max(0, Math.min(g.n - 1, t)); if (!raf) raf = requestAnimationFrame(loop); };
+        z.open = () => {
+          x0 = null; cur = tgt = g.zero; draw();
+          // a small turn back and forth so people see it is 3D; the mouse takes over as soon as it moves
+          hintT = [setTimeout(() => turn(g.zero - 5), 380), setTimeout(() => turn(g.zero + 5), 1000), setTimeout(() => turn(g.zero), 1600)];
+        };
+        z.close = () => { hintT.forEach(clearTimeout); cancelAnimationFrame(raf); raf = 0; cur = tgt = g.zero; st.style.opacity = 1; };
+        c.addEventListener('pointermove', e => {
+          const b = c.getBoundingClientRect();
+          if (x0 == null) { x0 = e.clientX; a0 = tgt; hintT.forEach(clearTimeout); }
+          turn(a0 - (e.clientX - x0) / b.width * 46);  // ~92 deg per card width; moving right turns the scene's front to the right
+        });
       });
-      a.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
+
+      if (fine) new IntersectionObserver((es, ob) => {  // fetch the live content once the figure has been on screen for a moment
+        if (!es[0].isIntersecting) return;
+        ob.disconnect();
+        setTimeout(() => (window.requestIdleCallback || setTimeout)(warm), 2500);
+      }, { threshold: 0.5 }).observe(box);
     });
-    new IntersectionObserver((es, ob) => {  // one gentle pulse so people see the panels are clickable
-      if (!es[0].isIntersecting) return;
-      ob.disconnect();
-      setTimeout(() => { box.classList.add('pulse'); setTimeout(() => box.classList.remove('pulse'), 1800); }, 500);
-    }, { threshold: 0.6 }).observe(box);
   })();
 
   /* ───── comparisons (all checked against ground truth): drag slider, StereoViT vs one baseline at a time ───── */
@@ -309,8 +600,6 @@
     $('#cmp-tag-a').textContent = MNAME[cmpMethod];
     $('#cmp-text').textContent = cmpMethod === 'gt' ? (GT_TEXT[c.key] || 'White in the ground truth: nothing measured there.') : (CMP_TEXT[c.key] || ['', ''])[1];
     $('#cmp-input').src = `static/cmp/${c.key}_img.jpg${V}`;
-    $('#cmp-gt-fig').style.display = c.gt ? '' : 'none';
-    if (c.gt) $('#cmp-gt').src = `static/cmp/${c.key}_gt.jpg${V}`;
   }
   cmpMain.closest('.reveal').addEventListener('reveal', () => setTimeout(cmpMain.sweep, 400), { once: true });
 
