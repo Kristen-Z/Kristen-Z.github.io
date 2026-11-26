@@ -218,8 +218,53 @@
   drawPanel(0);
   svg.closest('.reveal').addEventListener('reveal', () => { shown = true; setTimeout(() => drawPanel(panel), 120); }, { once: true });
 
+  /* ───── teaser: each panel links to its live version on the page; the plot points show their numbers ───── */
+  (() => {
+    const box = $('#teaser-inner');
+    if (!box) return;
+    const IW = 2750, IH = 917, pct = (v, d) => `${(100 * v / d).toFixed(3)}%`;
+    const place = (el, x0, y0, x1, y1) => Object.assign(el.style, { left: pct(x0, IW), top: pct(y0, IH), width: pct(x1 - x0, IW), height: pct(y1 - y0, IH) });
+    [[40, 10, 700, 850, '#accuracy', 'Interactive plot'], [752, 30, 1496, 404, '#method', 'Architecture'],
+      [1550, 94, 1900, 336, '#compare', 'Depth comparisons'], [752, 430, 1920, 850, '#robot', 'Robot rollouts'],
+      [1960, 30, 2744, 400, '#in3d', 'Explore in 3D'], [1960, 500, 2744, 850, '#more', 'Grasping']].forEach(([x0, y0, x1, y1, href, label]) => {
+      const a = document.createElement('a');
+      a.className = x0 > IW * 0.6 ? 'tz r' : 'tz'; a.href = href; a.setAttribute('aria-label', label);  // right column: label on the right
+      a.innerHTML = `<span>${label} <i class="fas fa-arrow-down"></i></span>`;
+      place(a, x0, y0, x1, y1);
+      box.appendChild(a);
+    });
+    const tip = document.createElement('div');
+    tip.className = 'plot-tip teaser-tip';
+    box.appendChild(tip);
+    const PTS = [  // marker centres in the figure (px) and the PANELS entry they show
+      [0, 'StereoViT-L', 487, 80], [0, 'StereoViT-M', 628, 97], [0, 'NBS', 294, 104], [0, 'WAFT-Stereo-L', 420, 172],
+      [0, 'S2M2-XL', 408, 187], [0, 'FoundationStereo', 234, 322], [1, 'StereoViT-L', 488, 480], [1, 'S2M2-XL', 409, 500],
+      [1, 'NBS', 295, 519], [1, 'WAFT-Stereo-L', 420, 598], [1, 'FoundationStereo', 234, 706]];
+    PTS.forEach(([p, name, x, y]) => {
+      const P = PANELS[p], v = P.pts[name], ours = name.startsWith('StereoViT'), r = ours ? 22 : 17;
+      const a = document.createElement('a');
+      a.className = 'tp'; a.href = '#accuracy'; a.setAttribute('aria-label', name);
+      place(a, x - r, y - r, x + r, y + r);
+      box.appendChild(a);
+      a.addEventListener('pointerenter', () => {
+        tip.innerHTML = `${ours ? `<b>${name}</b>` : name} · ${v[0]} ms · ${P.y.replace(' (%)', '')} ${v[1].toFixed(2)}%`;
+        tip.style.left = pct(x, IW); tip.style.top = pct(y - r, IH); tip.style.opacity = 1;
+      });
+      a.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
+    });
+    new IntersectionObserver((es, ob) => {  // one gentle pulse so people see the panels are clickable
+      if (!es[0].isIntersecting) return;
+      ob.disconnect();
+      setTimeout(() => { box.classList.add('pulse'); setTimeout(() => box.classList.remove('pulse'), 1800); }, 500);
+    }, { threshold: 0.6 }).observe(box);
+  })();
+
   /* ───── comparisons (all checked against ground truth): drag slider, StereoViT vs one baseline at a time ───── */
-  const MNAME = { fs: 'FoundationStereo', waft: 'WAFT-Stereo-L', s2m2: 'S2M2-XL' };
+  const MNAME = { fs: 'FoundationStereo', waft: 'WAFT-Stereo-L', s2m2: 'S2M2-XL', gt: 'Ground truth' };
+  // shown instead of the scene text while the ground truth is on the slider (white = nothing measured)
+  const GT_TEXT = {
+    glassdoors: 'The laser scan has no ground truth on the glass itself (white): scanners cannot measure glass either. Frame and walls match.',
+  };
   const CMP_TEXT = {
     glassdoors: ['Glass doors', 'The baselines see through the glass or leave holes; StereoViT keeps the doors solid.'],
     bin: ['Metal rods', 'Shiny rods break up the bin floor for the baselines; StereoViT keeps it flat.'],
@@ -248,10 +293,11 @@
     const c = cmpData[i];
     cmpIdx = i;
     $$('#cmp-tabs button').forEach((b, k) => b.classList.toggle('on', k === i));
-    if (!c.methods.includes(cmpMethod)) cmpMethod = c.methods[0];
+    const methods = c.gt ? [...c.methods, 'gt'] : c.methods;
+    if (!methods.includes(cmpMethod)) cmpMethod = methods[0];
     const seg = $('#cmp-methods');
     seg.innerHTML = '';
-    c.methods.forEach(m => {
+    methods.forEach(m => {
       const b = document.createElement('button');
       b.textContent = MNAME[m];
       b.classList.toggle('on', m === cmpMethod);
@@ -261,7 +307,7 @@
     $('.cmp-a', cmpMain).src = `static/cmp/${c.key}_${cmpMethod}.jpg${V}`;
     $('.cmp-b', cmpMain).src = `static/cmp/${c.key}_oursL.jpg${V}`;
     $('#cmp-tag-a').textContent = MNAME[cmpMethod];
-    $('#cmp-text').textContent = (CMP_TEXT[c.key] || ['', ''])[1];
+    $('#cmp-text').textContent = cmpMethod === 'gt' ? (GT_TEXT[c.key] || 'White in the ground truth: nothing measured there.') : (CMP_TEXT[c.key] || ['', ''])[1];
     $('#cmp-input').src = `static/cmp/${c.key}_img.jpg${V}`;
     $('#cmp-gt-fig').style.display = c.gt ? '' : 'none';
     if (c.gt) $('#cmp-gt').src = `static/cmp/${c.key}_gt.jpg${V}`;

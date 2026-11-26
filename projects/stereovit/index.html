@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
-  <link rel="stylesheet" href="static/css/style.css?v=202611252234">
+  <link rel="stylesheet" href="static/css/style.css?v=202611261546">
 
   <script type="importmap">
     { "imports": {
@@ -127,8 +127,10 @@
   <section class="section alt" id="abstract">
     <div class="container">
       <figure class="teaser reveal">
-        <img src="static/img/teaser_v4.jpg" alt="StereoViT overview: accuracy vs latency, frozen features for policy learning, point cloud for grasping" loading="lazy">
-        <figcaption><b>Accurate, fast, and transferable to robust robot manipulation.</b></figcaption>
+        <div class="teaser-map"><div class="teaser-inner" id="teaser-inner">
+          <img src="static/img/teaser_v4.jpg" alt="StereoViT overview: accuracy vs latency, frozen features for policy learning, point cloud for grasping" loading="lazy">
+        </div></div>
+        <figcaption><b>Accurate, fast, and transferable to robust robot manipulation.</b> <span class="teaser-hint">Click a panel to explore it.</span></figcaption>
       </figure>
       <details class="abstract reveal">
         <summary><span class="eyebrow">Abstract</span><span class="more">Read the abstract <i class="fas fa-chevron-down"></i></span></summary>
@@ -220,7 +222,7 @@
             <button id="pc-orbit" class="tool on" title="Auto orbit"><i class="fas fa-rotate"></i></button>
             <button id="pc-reset" class="tool" title="Back to the camera view"><i class="fas fa-camera"></i></button>
           </div>
-          <div class="viewer-hint"><span class="kbd">drag</span> orbit · <span class="kbd">scroll</span> zoom · <span class="kbd">right-drag</span> pan</div>
+          <div class="viewer-hint"><span class="kbd">drag</span> orbit · <span class="kbd">scroll</span> zoom · <span class="kbd">right-drag</span> pan · <span class="kbd">middle-drag</span> roll</div>
           <div class="viewer-load" id="pc-load"><span></span></div>
         </div>
         <div class="viewer-side">
@@ -239,8 +241,8 @@
   <!-- ───────────── Comparison ───────────── -->
   <section class="section alt" id="compare">
     <div class="container">
-      <h2 class="h2 reveal"><span class="eyebrow">Comparison</span>Solid on glass, shiny metal and fine detail</h2>
-      <p class="lede reveal">Drag the handle to compare with state-of-the-art stereo models.</p>
+      <h2 class="h2 reveal"><span class="eyebrow">Comparison</span>Hard cases: glass, metal and fine detail</h2>
+      <p class="lede reveal">Drag the handle to compare with state-of-the-art stereo models, or with the ground truth.</p>
       <div class="tabs reveal" id="cmp-tabs"></div>
       <div class="cmp-bar reveal"><span class="cmp-bar-label">Compare with</span><div class="seg" id="cmp-methods"></div></div>
       <div class="cmp-stage reveal">
@@ -361,7 +363,7 @@
 
   <div class="lightbox" id="lightbox"><img alt=""></div>
 
-  <script src="static/js/main.js?v=202611252234" defer></script>
-  <script type="module" src="static/js/pc.js?v=202611252234"></script>
+  <script src="static/js/main.js?v=202611261546" defer></script>
+  <script type="module" src="static/js/pc.js?v=202611261546"></script>
 </body>
 </html>

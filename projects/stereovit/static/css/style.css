@@ -483,6 +483,8 @@ figcaption .mname.ours { color: #8ff0b8; font-size: 16px; }
   .cmp-bar { gap: 6px; }
   .cmp-bar .seg { width: 100%; }
   .cmp-bar .seg button { flex: 1; padding: 0 6px; font-size: 12.5px; }
+  #cmp-methods { flex-wrap: wrap; border-radius: 16px; }   /* four options: two rows of two */
+  #cmp-methods button { flex: 1 1 calc(50% - 4px); }
 }
 .split > * { min-width: 0; }
 @media (max-width: 560px) {
@@ -518,3 +520,21 @@ figcaption .mname.ours { color: #8ff0b8; font-size: 16px; }
 .rdepth .cmp-text { color: #dfe5f7; }
 .rdepth .thumbs figcaption { color: #b9c3e4; }
 .rd-note { font-size: 13px; color: #8e99c0; margin: 12px 0 0; }
+
+/* teaser: clickable panels (each links to its live section) and plot points with their numbers */
+.teaser-map { background: #fff; border-radius: var(--radius); padding: clamp(10px, 2vw, 24px); box-shadow: var(--shadow); }
+.teaser-inner { position: relative; }
+.teaser .teaser-map img { display: block; padding: 0; background: none; border-radius: 0; box-shadow: none; }
+.tz { position: absolute; border-radius: 12px; transition: background .2s, box-shadow .2s; }
+.tz span { position: absolute; left: 10px; top: 10px; padding: 5px 11px; border-radius: 999px; background: var(--navy-900); color: #fff;
+  font: 600 13px var(--body, inherit); white-space: nowrap; opacity: 0; transform: translateY(-4px); transition: opacity .2s, transform .2s; pointer-events: none; }
+.tz.r span { left: auto; right: 10px; }
+.tz:hover, .tz:focus-visible { background: rgba(51, 194, 122, .07); box-shadow: inset 0 0 0 2px rgba(51, 194, 122, .7); }
+.tz:hover span, .tz:focus-visible span { opacity: 1; transform: none; }
+.tp { position: absolute; z-index: 2; border-radius: 50%; }
+.tp:hover { box-shadow: 0 0 0 3px rgba(51, 194, 122, .6); }
+.teaser-tip { z-index: 3; }
+.teaser-inner.pulse .tz { animation: tzpulse 1.6s ease-in-out; }
+@keyframes tzpulse { 0%, 100% { box-shadow: inset 0 0 0 2px rgba(51, 194, 122, 0); } 40% { box-shadow: inset 0 0 0 2px rgba(51, 194, 122, .55); } }
+.teaser-hint { color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .teaser-inner.pulse .tz { animation: none; } }
