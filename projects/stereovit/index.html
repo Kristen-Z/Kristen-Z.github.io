@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
-  <link rel="stylesheet" href="static/css/style.css?v=202611261826">
+  <link rel="stylesheet" href="static/css/style.css?v=202611262054">
 
   <script type="importmap">
     { "imports": {
@@ -75,15 +75,16 @@
 
       <div class="links">
         <a class="btn" href="#" data-todo="arXiv abs"><i class="ai ai-arxiv"></i><span>arXiv</span></a>
-        <a class="btn" href="https://github.com/Kristen-Z/StereoViT"><i class="fab fa-github"></i><span>Code</span></a>
+        <a class="btn" href="https://youtu.be/mr59Szfng8A" target="_blank" rel="noopener"><i class="fab fa-youtube"></i><span>Video</span></a>
+        <a class="btn" href="https://github.com/cvg/stereovit"><i class="fab fa-github"></i><span>Code</span></a>
         <a class="btn" href="https://huggingface.co/spaces/Kristen-Z/StereoViT"><i class="fas fa-rocket"></i><span>Demo</span></a>
         <a class="btn" href="https://huggingface.co/Kristen-Z/StereoViT"><span class="hf">🤗</span><span>Models</span></a>
-        <a class="btn ghost" href="#bibtex"><i class="fas fa-quote-right"></i><span>BibTeX</span></a>
+        <a class="btn" href="#bibtex"><i class="fas fa-quote-right"></i><span>BibTeX</span></a>
       </div>
     </div>
     <div class="hero-strip">
       <a class="strip-cap" href="#robot"><span class="dot"></span>Same model, frozen: diffusion policies on StereoViT features, in unseen scenes · 2×</a>
-      <div class="hreel-row" aria-label="Robot rollouts in unseen scenes"><div class="hreel-track"><video src="static/hero/hero_strip_a.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_strip_b.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_strip_a.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_strip_b.mp4" muted loop playsinline autoplay preload="auto"></video></div></div>
+      <div class="hreel-row" aria-label="Robot rollouts in unseen scenes"><div class="hreel-track"><video src="static/hero/hero_reel_a.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_reel_b.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_reel_c.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_reel_a.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_reel_b.mp4" muted loop playsinline autoplay preload="auto"></video><video src="static/hero/hero_reel_c.mp4" muted loop playsinline autoplay preload="auto"></video></div></div>
     </div>
     <div class="hero-caption">
       <span class="dot"></span><span>Live 3D · StereoViT-L point cloud from one stereo pair<span class="hide-s"> · <span class="kbd">drag</span> to look around</span></span>
@@ -112,12 +113,12 @@
 
   <!-- ───────────── Video ───────────── -->
   <section class="section" id="video">
-    <div class="container narrow">
+    <div class="container">
       <h2 class="h2 reveal">Overview video</h2>
       <!-- YouTube: put the video id in data-youtube (the local mp4 is then not used and can be deleted) -->
       <div class="video-frame reveal" data-youtube="">
-        <video controls preload="none" playsinline poster="static/img/video_poster.jpg">
-          <source src="static/video/stereovit_overview_50s.mp4" type="video/mp4">
+        <video controls preload="none" playsinline poster="static/img/launch_poster.jpg">
+          <source src="static/video/stereovit_launch.mp4" type="video/mp4">
         </video>
       </div>
     </div>
@@ -208,7 +209,7 @@
 
   <!-- ───────────── 3D viewer ───────────── -->
   <section class="section" id="in3d">
-    <div class="container wide">
+    <div class="container">
       <h2 class="h2 reveal"><span class="eyebrow">Interactive</span>Metric 3D from a single stereo pair</h2>
       <p class="lede reveal">One stereo pair, one forward pass. No fusion over time.</p>
       <div class="viewer-grid reveal">
@@ -265,7 +266,7 @@
 
   <!-- ───────────── Robot ───────────── -->
   <section class="section dark" id="robot">
-    <div class="container wide">
+    <div class="container">
       <h2 class="h2 reveal"><span class="eyebrow">Real robot</span>Trained in one scene. Deployed in unseen ones.</h2>
       <p class="lede reveal">Frozen StereoViT features, a policy trained in one scene, tested in new ones. Videos at 2×.</p>
       <div class="tabs dark reveal" id="task-tabs"></div>
@@ -341,7 +342,7 @@
 
   <!-- ───────────── BibTeX ───────────── -->
   <section class="section alt" id="bibtex">
-    <div class="container narrow">
+    <div class="container">
       <h2 class="h2 reveal"><span class="eyebrow">Citation</span>BibTeX</h2>
       <div class="bib reveal">
         <button class="copy" id="bib-copy"><i class="far fa-copy"></i> Copy</button>
@@ -363,7 +364,7 @@
 
   <div class="lightbox" id="lightbox"><img alt=""></div>
 
-  <script src="static/js/main.js?v=202611261826" defer></script>
-  <script type="module" src="static/js/pc.js?v=202611261826"></script>
+  <script src="static/js/main.js?v=202611262054" defer></script>
+  <script type="module" src="static/js/pc.js?v=202611262054"></script>
 </body>
 </html>
