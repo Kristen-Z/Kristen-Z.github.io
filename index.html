@@ -84,6 +84,52 @@
           <table
             style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
             <tbody>
+              <tr onmouseout="stereovit_stop()" onmouseover="stereovit_start()">
+                <td style="padding:20px;width:25%;vertical-align:middle">
+                  <div class="one">
+                    <div class="two" id='stereovit_image'>
+                      <img src='images/stereovit.jpg' width="160">
+                    </div>
+                    <img src='images/stereovit.jpg' width="160">
+                  </div>
+                  <script type="text/javascript">
+                    function stereovit_start() {
+                      document.getElementById('stereovit_image').style.opacity = "1";
+                    }
+
+                    function stereovit_stop() {
+                      document.getElementById('stereovit_image').style.opacity = "0";
+                    }
+                    stereovit_stop()
+                  </script>
+                </td>
+                <td style="padding:20px;width:75%;vertical-align:top;">
+                  <a href="https://kristen-z.github.io/projects/stereovit/">
+                    <span class="papertitle">StereoViT: Stereo Vision Transformer for Robust Robot Manipulation</span>
+                  </a>
+                  <br>
+                  <strong>Dingxi Zhang</strong>,
+                  <a href="https://scholar.google.com/citations?user=BjEdv_AAAAAJ&amp;hl=en">Alexey Gavryushin</a>,
+                  <a href="https://www.mpi-inf.mpg.de/departments/computer-vision-and-machine-learning/people/bernt-schiele">Bernt Schiele</a>,
+                  <a href="https://people.inf.ethz.ch/marc.pollefeys/">Marc Pollefeys</a>,
+                  <a href="https://haofeixu.github.io/">Haofei Xu</a>
+                  <br>
+                  <em>arXiv</em>, 2026
+                  <br>
+                  <a href="https://kristen-z.github.io/projects/stereovit/static/StereoViT.pdf">paper</a> / <a
+                    href="https://kristen-z.github.io/projects/stereovit/">project</a> / <a
+                    href="https://github.com/cvg/stereovit">code</a> / <a
+                    href="https://huggingface.co/spaces/Kristen-Z/StereoViT">demo</a> / <a
+                    href="https://huggingface.co/Kristen-Z/StereoViT">models</a> / <a
+                    href="https://youtu.be/mr59Szfng8A">video</a>
+                  <p></p>
+                  <p>
+                    A streamlined stereo vision transformer that predicts accurate disparity in a single forward pass
+                    and provides frozen stereo features for robust robot manipulation.
+                  </p>
+                </td>
+              </tr>
+
               <tr onmouseout="splash_stop()" onmouseover="splash_start()">
                 <td style="padding:20px;width:25%;vertical-align:middle">
                   <div class="one">
